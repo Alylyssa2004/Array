@@ -321,12 +321,12 @@ We replace :
 p(\mathbf{n}(k)) & = \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \exp^{- \frac{1}{\sigma^2} (\lVert \mathbf{n_{re}}(k) \rVert^2 +  \lVert \mathbf{n}_{im}(k) \rVert^2)  }\\
 & = \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n_{re}}(k) \rVert^2  }  \times \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \; \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n}_{im}(k) \rVert^2  }
 \end{align*}
-The real vectorial Gaussian for $\mathcal{N}(\mathbf{m}_0, \; \sigma_0^2 \, \mathbf{I})$ the distribution being 
+By the real vectorial Gaussian for $\mathcal{N}(\mathbf{m}_0, \; \sigma_0^2 \, \mathbf{I})$ with the following distribution: 
 
 \begin{equation*}
 p(\mathbf{x})  = \frac{1}{(2\,\pi \, \sigma_0^2 )^{N/2}} \exp^{- \frac{1}{ 2 \, \sigma_0^2 } \lVert \mathbf{x} - \mathbf{m}_0\rVert^2  }
 \end{equation*}
-We arrive at the separation in a product of two real gaussian:
+We arrive at the separation in a product of two real gaussians:
 
 \begin{equation*}
 p(\mathbf{n}(k))  = \mathbf{n_{re}}(k) \; \mathbf{n_{im}}(k) =  \mathcal{N}(0, \, \frac{\sigma^2}{2}\mathbf{I} )  \;\mathcal{N}(0, \, \frac{\sigma^2}{2} \mathbf{I}) 
@@ -334,7 +334,7 @@ p(\mathbf{n}(k))  = \mathbf{n_{re}}(k) \; \mathbf{n_{im}}(k) =  \mathcal{N}(0, \
 
 \break
 
-After implementing the received signal $y(k) \qquad \forall k \in [\![1,\, K]\!]$ :
+We implement the received signal $y(k) \qquad \forall k \in [\![1,\, K]\!]$ :
 
 \begin{figure}[h!]
     \centering
@@ -352,7 +352,7 @@ This allows us to implement the new $MVDR$ and $MPDR$ filters with the matrices 
     \label{fig:placeholder}
 \end{figure}
 
-We see that the errors of the new filters converged to the filters where $R$ and $C$ were known. Overall, the $MPDR$ filter has higher error values and converges more slowly than the $MVDR$ filter. To compare them further, we calculate the $SINR$ of the two methods over $50$ Monte-Carlo realizations. For this, we consider $R$ and $C$ known. We obtain:
+We see that the errors of the new filters converged to the filter's values when $R$ and $C$ were known. Overall, the $MPDR$ filter has higher error and converges more slowly than the $MVDR$ filter. To compare them further, we calculate the $SINR$ of the two methods over $50$ Monte-Carlo realizations. For this, we consider $R$ and $C$ known. We obtain:
 
 \break
 
@@ -363,7 +363,7 @@ We see that the errors of the new filters converged to the filters where $R$ and
     \label{fig:placeholder}
 \end{figure}
 
-The mean $SINR$ over the $50$ realizations for the two methods converges to the real values of $SINR$: as $K$ increases, noise in the sample covariance estimate decreases, so the estimated beamformer weights approach the optimal ones. $MVDR$ reaches a much higher $SINR$ than $MPDR$ and converges faster, confirming its superior interference suppression capability.
+The mean $SINR$ over the $50$ realizations for the two methods converge to the real values of $SINR$: as $K$ increases, noise in the sample covariance estimate decreases, so the estimated beamformer weights approach the optimal ones. $MVDR$ reaches a much higher $SINR$ than $MPDR$ and converges faster, confirming its superior interference suppression capability.
 
 
 \subsubsection{Robust MPDR}
@@ -375,17 +375,14 @@ We implement the Robust MPDR filter, which is a form of MPDR where a factor $\mu
     \caption{Comparison MVDR, MPDR, and Robust MPDR}
     \label{fig:placeholder}
 \end{figure}
-When we examine the standard deviation along the diagonal of $R$, we find values of about $0.0089$ on average across all Monte Carlo runs. 
-If we then introduce the $\mu$ factor and set it too large (on the order of 1), its contribution becomes dominant—around $11{,}000\,\%$. 
-In this case, all diagonal terms become nearly identical, which degrades performance because the algorithm can no longer distinguish 
-differences in the covariance values.\\
+When we examine the standard deviation along the diagonal of $R$, we find values around $0.0089$ on average across all Monte Carlo runs. 
+Then, if we introduce the $\mu$ factor and set it too large (around 1), its contribution becomes dominant—around $11{,}000\,\%$. 
+In this case, all diagonal terms become nearly identical, which degrades performance since the algorithm can no longer distinguish differences in the covariance values.\\
 
-Conversely, if $\mu$ is too small (around $10^{-5}$), its contribution represents only about $0.11\,\%$. Its effect is therefore negligible, and no improvement 
-is observed in the beamformer’s performance.\\
+Conversely, if $\mu$ is too small (around $10^{-5}$), its contribution represents only about $0.11\,\%$. Its effect is therefore negligible, and no improvement is observed in the beamformer’s performance.\\
 
 With more moderate values of $\mu$ (e.g., $10^{-3}$ in this case), the contribution is around $11\,\%$. 
-This increases the overall diagonal, improving matrix conditioning and stability during inversion, while still preserving enough variation 
-to distinguish between entries.  We also note that for $\mu = 0$, the SINR of the robust MPDR collapses to the classic MPDR value, and 
+It increases the overall diagonal, improves matrix conditioning and stability during inversion, while still preserving enough variation to distinguish between entries.  We also note that for $\mu = 0$, the SINR of the robust MPDR collapses to the classic MPDR value, and 
 if $\mu$ is too large, the SINR drops. \\
 
 Therefore, to improve MPDR performance, $\mu$ values between $10^{-4}$ and $10^{-2}$ are recommended. 
@@ -406,7 +403,7 @@ with $\mathbf{A}(\boldsymbol{\theta}_S) = [\mathbf{a}(\theta_1) ,\,\mathbf{a}(\t
 % -- Question 1 -- 
 % \paragraph{Question 1 - Define "non-parametric"}
 
-Non-parametric methods do not assume a specific model for the source signals—they work directly with the output power received after beamforming.
+Non-parametric methods do not assume a specific model for the source signals: they work directly with the output power received after beamforming.
 We start by implementing the two methods based on the conventional $\mathbf{w}_{CBF}$ and adaptive beamforming with Capon's method $\hat{\mathbf{w}}_{MPDR}$, with interferences. We obtain:
 
 \begin{figure}[H]
@@ -427,7 +424,7 @@ We start by implementing the two methods based on the conventional $\mathbf{w}_{
     \caption{Conventional and Capon comparison}
     \label{fig:IntrSunSensors}
 \end{figure}
-We can see that both methods show spectral peaks at the true angles of arrival, indicated by the dashed vertical lines. However, the Capon exhibits much sharper and narrower peaks than the conventional method. This means $MVDR$ is more effective at separating closely spaced sources. The conventional beamformer has large side lobes while the $MVDR$ suppresses them, dropping more than $40$ dB below the main peaks. The $MVDR$ spectrum includes deep nulls at the positions of interferers, unlike the conventional method. This is a signature of adaptive beamforming: $MVDR$ actively cancels interference while preserving the desired signal.When the third source has $\theta_3=21$°, we see that the second and third DoA are not accurately separated. The methods are not precise enough.
+We can see that both methods show spectral peaks at the true angles of arrival, indicated by the dashed vertical lines. However, the Capon exhibits much sharper and narrower peaks than the conventional method. This means $MVDR$ is more effective at separating closely spaced sources. The conventional beamformer has large side lobes while the $MVDR$ suppresses them, dropping more than $40$ dB below the main peaks. The $MVDR$ spectrum includes deep nulls at the positions of interferers, unlike the conventional method. This is a signature of adaptive beamforming: $MVDR$ actively cancels interference while preserving the desired signal.When the third source is $\theta_3=21$°, we see that the second and third DoA are not accurately separated. The methods are not precise enough.
 
 \subsection{Implementation of parametric approaches}
 
