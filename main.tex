@@ -141,13 +141,12 @@ Once it is done, we implement the optimal adaptive beamforming $\mathbf{w}_{opt}
 
 \break
 
-Now, we assume that the angle $\theta_S$ is not very well-known and is provided by an estimator
-$\widehat{\theta_S}$. To handle this, it needs to implement both the Minimum Power Distortionless Response ($MVDR$) filter $\mathbf{w}_{MVDR}$ and the Minimum Variance Distortionless Response ($MPDR$) filter $\mathbf{w}_{MPDR}$ , considering that only the matrix $\mathbf{R}$ is known.
+Now, we assume that the angle $\theta_S$ is not very well-known and is provided by an estimator $\widehat{\theta_S}$. To handle this, we need to implement both the Minimum Power Distortionless Response ($MVDR$) filter $\mathbf{w}_{MVDR}$ and the Minimum Variance Distortionless Response ($MPDR$) filter $\mathbf{w}_{MPDR}$ , considering that only the matrix $\mathbf{R}$ is known.
 
 % -- Question 5 --
 \subsubsection{Signal-to-Interference and Noise Ratio (SINR) expression}
  
-We filter the signal at reception with the filter $\mathbf{w}$. Meaning the received signal is
+We filter the signal at reception with the filter $\mathbf{w}$. Meaning the received signal is:
 
 \begin{equation*}
 \mathbf{y}_R(k) =  \mathbf{w} \; \mathbf{y}(k) = \underbrace{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) }_{signal \; of \; interest } \;  + \; \underbrace{ \mathbf{w}^\dagger \, \left(\mathbf{y}_I(k) + \mathbf{n}(k) \right) }_{interf. \; and  \; noise}  
@@ -796,6 +795,6 @@ signals are unknown, the estimation problem becomes significantly more difficult
 sensitivity to initialization and noise. In practice, ML is often used as a benchmark or combined 
 with subspace-based methods for improved robustness.
 
-COUCOUUUUUUUUU
+
 
 \end{document}
