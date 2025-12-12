@@ -251,7 +251,7 @@ The derivative with respect to the Lagrange multiplier \(\lambda\) is straightfo
 \[
 \frac{\partial \mathcal{L}(\lambda, \mathbf{w})}{\partial \lambda} = \mathbf{w}^\dagger \mathbf{a}(\theta_S) - 1.
 \]
-Lagrange conditions give us that the problem solutions are  $\left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\}$ solutions of 
+Lagrange conditions give us that the problem solutions are  $\left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\}$ such that :
 
 \begin{align*} 
     & \left\{  
@@ -273,13 +273,13 @@ Lagrange conditions give us that the problem solutions are  $\left\{ \tilde{\mat
     \end{aligned}
     \right.
 \end{align*}
-Substituting the second equation in the first one, the $MPDR$ filter solution of \autoref{eq:MPDRinit}
+By substituting the second equation in the first one, we obtain the $MPDR$ filter solution of \autoref{eq:MPDRinit}
 
 \begin{equation*}
 \mathbf{w}_{MPDR} = \tilde{\mathbf{w}} =\frac{\mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}{\mathbf{a} (\theta_S)^\dagger \, \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}
 \end{equation*}
 \break
-Now that the expressions of the filters and of the  are computed, we can implement the two approaches by assuming the error between the true angle and the estimated angle is equal to $2^\circ$, and compare them to the Conventional and Adaptive beamforming :
+Now that the expressions of the filters are computed, we can implement the two approaches by assuming the error between the true angle and the estimated angle is equal to $2^\circ$, and compare them to the Conventional and Adaptive beamforming :
 
 \begin{figure}[h!]
     \centering
@@ -292,17 +292,13 @@ We notice that around $\theta_s=20^\circ$ the four methods exhibit a strong peak
 A sharp drop appears around $\theta_i=30°$ which corresponds to the direction of the interfering source. The deeper the drop, the more effective the beamforming is in canceling the interference. Adaptive, MVDR, and MPDR achieve strong interference suppression, whereas the Conventional Beamformer (CBF) produces a much shallower null. 
 
 \subsection{Unknown covariance matrices}
-In the second case, we explore a more realistic scenario where the matrices C and R are
-unknown and must be estimated. To accomplish this, we need to collect multiple snapshots
-of the received signal, denoted as \( \mathbf{Y} = \{ \mathbf{y}(k)\}_{k \in [\![1,\, K]\!]} \), at different time instances. Typically, the covariance 
-matrices are estimated using:
+In the second case, we explore a more realistic scenario where the matrices C and R are unknown and must be estimated. To accomplish this, we need to collect multiple snapshots of the received signal, denoted as \( \mathbf{Y} = \{ \mathbf{y}(k)\}_{k \in [\![1,\, K]\!]} \), at different time instances. Typically, the covariance matrices are estimated using:
 \begin{align*}
 \widehat{\mathbf{C}} & = \frac{1}{K} \sum_{k=1}^{K} \bigl( (\mathbf{y}_I(k) + \mathbf{n}(k) ) (\mathbf{y}_I(k) + \mathbf{n}(k) )^\dagger \bigr)\\
 \widehat{\mathbf{R}} & = \frac{1}{K} \sum_{k=1}^{K} \mathbf{y}(k) \; \mathbf{y}(k) ^\dagger
 \end{align*}
 
-We are now interested in implementing and analyzing beamforming approaches based on
-these estimations.
+We are now interested in implementing and analyzing beamforming approaches based on these estimations.
 
 % -- Question 9 -- 
 \subsubsection{Noise probability density reformulation}
@@ -312,7 +308,7 @@ We have $\mathbf{n}(k) \sim  \mathcal{CN}(0, \, \sigma^2 \; \mathbf{I} )  $ with
 \begin{equation} \label{eq:compnorm} 
 \frac{1}{\pi^N\; \lvert \boldsymbol{\Sigma} \rvert} \; \exp^{- ( \mathbf{n}(k) -  \mathbf{m}) ^\dagger \, \boldsymbol{\Sigma}^{-1} \, (  \mathbf{n}(k) -  \mathbf{m})}
 \end{equation}
-From there, applying specifically for the studied case with $\mathbf{m} = 0$ and $ \boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$
+From there, we can apply it specifically for the studied case with $\mathbf{m} = 0$ and $ \boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$
 \begin{equation*}
 p(\mathbf{n}(k)) = \frac{1}{(\pi \, \sigma^2 )^N} \; \exp^{- \frac{1}{\sigma^2} \mathbf{n}(k) ^\dagger \mathbf{n}(k)}
 \end{equation*}
