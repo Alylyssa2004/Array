@@ -454,13 +454,13 @@ And then, the orthogonality of the matrix $U_N$ (from the SVD definition) yields
 \begin{equation} \label{eq:Rform}
 \mathbf{R} =  \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger + \sigma^2  \mathbf{U}_N \, \mathbf{U}_N^\dagger
 \end{equation}
-To compute the estimated power, \autoref{eq:generatrice} gives us that both $\mathbf{a}(\theta_S)$ and $\mathbf{U}_S$ generate the same space, meaning they are different bases but for the same space. Then, as we know $\mathbf{U}_S \perp \mathbf{U}_N $, we also have  $\mathbf{a}(\theta_S) \perp \mathbf{U}_N$. We then have $\mathbf{a}(\theta_S)^\dagger \cdot \mathbf{U}_N = 0$
-Numerically, a power is the sum of the energies of the studied signal. Here in the complex in the considered subspace, it can be written sum $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
+To compute the estimated power, \autoref{eq:generatrice} gives us that both $\mathbf{a}(\theta_S)$ and $\mathbf{U}_S$ generate the same space, meaning they are different bases of the same space. Then, as we know $\mathbf{U}_S \perp \mathbf{U}_N $, we obtain  $\mathbf{a}(\theta_S) \perp \mathbf{U}_N$. We also have $\mathbf{a}(\theta_S)^\dagger \cdot \mathbf{U}_N = 0$.
+Numerically, a power is the sum of the energies of the studied signal. Here, in the considered subspace, it can be written as $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
 
 \begin{equation*}
 P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \mathbf{U}_S \mathbf{U}_S^\dagger \; \mathbf{a}(\theta_S)}
 \end{equation*}
-From our assumption, we determine $\widehat{\mathbf{U}}_S$ from $\mathbf{R}$. In reality, we do not have access to $\mathbf{R}$ so we have to estimate it from a distribution. Meaning $\mathbf{R}$ becomes $\widehat{\mathbf{R}}$ and $\mathbf{U}_S$ becomes $\widehat{\mathbf{U}}_S$:
+From our assumptions, we determine $\widehat{\mathbf{U}}_S$ from $\mathbf{R}$. In reality, we do not have access to $\mathbf{R}$ so we have to estimate it from a distribution. Meaning $\mathbf{R}$ becomes $\widehat{\mathbf{R}}$ and $\mathbf{U}_S$ becomes $\widehat{\mathbf{U}}_S$:
 
 \begin{equation*}
 P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \widehat{\mathbf{U}}_S \widehat{\mathbf{U}}_S^\dagger \; \mathbf{a}(\theta_S)}
@@ -474,9 +474,9 @@ We implement this method with interferences. We set $\theta$ between $[-100^\cir
     \label{fig:placeholder}
 \end{figure}
 
-$MUSIC$ shows very sharp, narrow peaks aligned with the true DoAs. This is expected because $MUSIC$ exploits the orthogonality between the noise subspace and the array steering vectors. As a result, $MUSIC$ can separate closely spaced sources even when conventional or $MVDR$ beamforming struggles. On the other side, $MVDR$ also shows peaks at the correct DoAs, but the peaks are wider, less pronounced, and sometimes slightly shifted depending on estimation noise. So, overall, $MUSIC$ exhibits a stronger discrimination capability.\\
+$MUSIC$ shows very sharp, narrow peaks aligned with the true DoAs. This is expected because $MUSIC$ exploits the orthogonality between the noise subspace and the array steering vectors. As a result, $MUSIC$ can separate closely spaced sources even when conventional or $MVDR$ beamforming struggles. On the other hand, $MVDR$ also shows peaks at the correct DoAs, but the peaks are wider, less pronounced, and sometimes slightly shifted depending on estimation noise. So, overall, $MUSIC$ exhibits a stronger discrimination capability.\\
 
-We added interferences, and $MVDR$ shows a suppressed response near the interference DoA, because it tries to place a null while maintaining gain toward the desired direction, but Music does not. Which leads us to say that Music is a detection or estimation technique, while $MVDR$ is also more of a beamforming or filtering technique.
+We added interferences, and $MVDR$ shows a suppressed response near the interference DoA, because it tries to place a null while maintaining gain toward the desired direction, but MUSIC does not. Which leads us to say that MUSIC is a detection or estimation technique, while $MVDR$ is also more of a beamforming or filtering technique.
 
 \subsubsection{Maximum Likelihood method}
 
@@ -497,7 +497,7 @@ From \autoref{eq:sigdefpart2}, when $\mathbf{s}(k)$ modeling is known :
 \mathbf{y}(k) = \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) +  \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\; \sigma^2 \; \mathbf{I} )\qquad \Leftrightarrow \qquad \mathbf{y}(k) \sim  \mathcal{CN} (\mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k), \;\sigma^2 \; \mathbf{I} )
 \end{equation*}
 
-The equation \autoref{eq:argmaxx} then classically becomes :
+The equation \autoref{eq:argmaxx} becomes :
 
 \begin{align*}
 \widehat{\boldsymbol{\theta}}_{S,\, ML1} &= \underset{\boldsymbol{\theta}_S}{\arg \max} \quad p(\mathbf{Y} | \boldsymbol{\theta}_S) = \underset{\boldsymbol{\theta}_S}{\arg \min}\quad - \ln  p(\mathbf{Y} | \boldsymbol{\theta}_S)\\
@@ -552,7 +552,7 @@ Using \( \boldsymbol{\mu}_k(\boldsymbol{\theta}_S)=\mathbf{A}(\boldsymbol{\theta
 =
 \mathbf{D}\mathbf{A}_l \, \mathbf{s}(k)
 \end{equation*}
-so that the Fisher Information Matrix entries become
+so that the Fisher Information Matrix entries become:
 
 \begin{equation*}
 [\mathbf{I}(\boldsymbol{\theta}_S)]_{l,l'}
@@ -566,7 +566,7 @@ so that the Fisher Information Matrix entries become
 \mathbf{s}(k)
 \right).
 \end{equation*}
-Finally, the Cramér–Rao Bound for this case is given by
+Finally, the Cramér–Rao bound for this case is given by:
 
 \begin{equation*}
 \mathrm{CRB}(\boldsymbol{\theta}_S)
@@ -578,12 +578,12 @@ Finally, the Cramér–Rao Bound for this case is given by
 
 \subparagraph{Theorical estimator expression\\}
 
-When neither $s$ nor $\sigma^2$ are known, the terms with $\sigma^2$ that we integrated in the constant for the development above now have to be considered. By developing from \autoref{eq:argmaxbase} like above, we end up with 
+When neither $s$ nor $\sigma^2$ are known, the terms with $\sigma^2$ that we integrated in the constant for the development above now have to be considered. By developing from \autoref{eq:argmaxbase} like above, we end up with: 
 
 \begin{equation*}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2, \, \mathbf{s}(k)}{\arg \min}\quad - K \ln \Bigl( \frac{1}{\pi^N\; \lvert \boldsymbol{\Sigma} \rvert} \Bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K}  \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2
 \end{equation*}
-With $\boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$, we have $\lvert \boldsymbol{\Sigma} \rvert = \sigma^{2\,N} $ , and the term in $\pi$ is still a constant for the minimization
+With $\boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$, we have $\lvert \boldsymbol{\Sigma} \rvert = \sigma^{2\,N} $ , and the term in $\pi$ is still a constant for the minimization:
 
 \begin{equation} \label{eq:thml2base}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2, \, \mathbf{s}(k)}{\arg \min}\quad KN \ln \bigl( \sigma^2 \bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K} \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2
@@ -593,22 +593,22 @@ First, we minimize with respect to $\mathbf{s}(k)$ is a classical linear least�
 \begin{align*}
 \widehat{ \mathbf{s} }(k) & = \underset{\mathbf{s}(k)}{\arg \min} \quad \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2 = \underset{\mathbf{s}(k)}{\arg \min} \quad \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)^\dagger \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)
 \end{align*}
-The normal equation directly gives:
+The normal equation directly gives us:
 
 \begin{equation*}
 \widehat{ \mathbf{s} }(k) = \bigl( \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \mathbf{A}(\boldsymbol{\theta}_S) \bigr) ^{-1} \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \, \mathbf{y}(k)
 \end{equation*}
-This estimator is the unique vector whose image through $\mathbf{A}(\boldsymbol{\theta}_S)$ is the orthogonal projection of $ \mathbf{y}(k)$ onto the column space of $\mathbf{A}(\boldsymbol{\theta}_S)$. This defines the orthogonal projector and complement are:
+This estimator is the unique vector whose image through $\mathbf{A}(\boldsymbol{\theta}_S)$ is the orthogonal projection of $ \mathbf{y}(k)$ onto the column space of $\mathbf{A}(\boldsymbol{\theta}_S)$. This defines the orthogonal projector and complement:
 
 \begin{equation*}
-\mathbf{P_A}(\boldsymbol{\theta}_S)  = \mathbf{A}(\boldsymbol{\theta}_S)  \; \bigl( \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \mathbf{A}(\boldsymbol{\theta}_S) \bigr) \; \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \qquad \text{and} \qquad \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,= \mathbf{I} - \mathbf{P_A}(\boldsymbol{\theta}_S) 
+\mathbf{P_A}(\boldsymbol{\theta}_S)  = \mathbf{A}(\boldsymbol{\theta}_S)  \; \bigl( \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \mathbf{A}(\boldsymbol{\theta}_S) \bigr) ^{-1}\; \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \qquad \text{and} \qquad \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,= \mathbf{I} - \mathbf{P_A}(\boldsymbol{\theta}_S) 
 \end{equation*}
 With these defined, the vector fitted to this particular subspace becomes $\widehat{\mathbf{y}}(k) = \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) = \mathbf{P_A}(\boldsymbol{\theta}_S) \mathbf{y}(k)$. Thus, the solution becomes:
 
 \begin{equation*}
  \underset{\mathbf{s}(k)}{\arg \min} \quad\lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2 = \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)
 \end{equation*}
-After projecting out the signal subspace, the log-likelihood from \autoref{eq:thml2base} becomes - now independent from $\mathbf{s}(k)$ : 
+After projecting out the signal subspace, the log-likelihood from \autoref{eq:thml2base} becomes independent from $\mathbf{s}(k)$ : 
 
 \begin{equation*}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2}{\arg \min}\quad KN \ln \bigl( \sigma^2 \bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K} \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)
@@ -624,12 +624,12 @@ Differentiating with respect to $\sigma^2$ and setting the derivative to zero gi
 \frac{\partial f}{\partial \sigma^2} = \frac{A}{\sigma^2}-\frac{B}{(\sigma^2)^2}=0
 \quad\Longrightarrow\quad \widehat{\sigma}^2=\frac{B}{A}
 \end{equation*}
-Substituting this expression back into the likelihood removes all terms independent of $\boldsymbol{\theta}_S$. Therefore, the maximum likelihood estimator of $\boldsymbol{\theta}_S$ is obtained by minimizing
+Substituting this expression back into the likelihood removes all terms independent of $\boldsymbol{\theta}_S$. Therefore, the maximum likelihood estimator of $\boldsymbol{\theta}_S$ is obtained by minimizing:
 
 \begin{equation*}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S}{\arg\min} \quad \frac{1}{K}\sum_{k=1}^{K} \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S)\, \mathbf{y}(k)
 \end{equation*}
-We use that  $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\, \mathbf{y}(k) \in \mathbb{C}$ to replace with $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\,  \mathbf{y}(k) = \Tr (  \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)) $ , and as $\Tr$ is a circular operator, the equality extends to $= \Tr ( \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \,\mathbf{y}(k) \,\mathbf{y}(k)^\dagger)$. We then have by linearity of both sum and Tr : 
+We use that  $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\, \mathbf{y}(k) \in \mathbb{C}$ to replace with $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\,  \mathbf{y}(k) = \Tr (  \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)) $ , and as $\Tr$ is a circular operator, the equality extends to $= \Tr ( \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \,\mathbf{y}(k) \,\mathbf{y}(k)^\dagger)$. We then have by linearity of both sum and $\Tr$ : 
 
 \begin{align*}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} &= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad \frac{1}{K}\sum_{k=1}^{K} \Tr \Bigl(\mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \,\mathbf{y}(k) \,\mathbf{y}(k)^\dagger \Bigr)\\
@@ -649,7 +649,7 @@ To find the expression of the $CRB$,  we use the Slepian Bangs formula. The gene
 \right)
 \end{equation*}
 
-In our case, we have $ \boldsymbol{\mu}_k(\boldsymbol{\theta})  = 0 $ and $\boldsymbol{\Sigma}(\boldsymbol{\theta}) = \mathbf{R}$ , so that it simplifies:
+In our case, we have $ \boldsymbol{\mu}_k(\boldsymbol{\theta})  = 0 $ and $\boldsymbol{\Sigma}(\boldsymbol{\theta}) = \mathbf{R}$ , so that it simplifies to:
 
 \begin{equation*}
 [\mathbf{I}(\boldsymbol{\theta})]_{l,l'} = K \, \Tr \left(
@@ -667,7 +667,7 @@ Now, let's decompose the matrix derivative of $\mathbf{A}(\boldsymbol{\theta}) \
 \begin{equation} \label{eq:matAderiv}
 \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} = \left[\, \frac{\partial \mathbf{a}(\theta_1)}{\partial(\boldsymbol{\theta})_l},\,  \frac{\partial \mathbf{a}(\theta_2)}{\partial(\boldsymbol{\theta})_l}, \, \cdots, \,  \frac{\partial \mathbf{a}(\theta_P)}{\partial(\boldsymbol{\theta})_l} \right]
 \end{equation}
-Let $k$ be in $[\![1;P]\!]$. If $k \neq l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = 0$. If $k=l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = \frac{\partial \mathbf{a}(\theta_l)}{ \partial(\boldsymbol{\theta})_l}$. Now, let's decompose the derivative of $\mathbf{a}(\theta_l) \in \mathbb{R}^N$. With respect to $(\boldsymbol{\theta})_l$. From \autoref{eq:vectath} as it's a ULA network with $N$ antennas:
+Let $k$ be in $[\![1;P]\!]$. If $k \neq l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = 0$ and if $k=l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = \frac{\partial \mathbf{a}(\theta_l)}{ \partial(\boldsymbol{\theta})_l}$. Now, let's decompose the derivative of $\mathbf{a}(\theta_l) \in \mathbb{R}^N$, with respect to $(\boldsymbol{\theta})_l$. From \autoref{eq:vectath} as it's a ULA network with $N$ antennas:
 
 \begin{equation*}
 \mathbf{a}(\theta_l) = \{\exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})}  \}_{n \in [\![1;N]\!]} = \begin{pmatrix} 1\\
@@ -725,13 +725,13 @@ Let $\boldsymbol{\theta} = [\theta_1,\dots,\theta_P]^T$ be the parameter vector.
 
 For all $(l,l')\in [\![1,P]\!]^2$:
 \begin{itemize}
-    \item Compute the Jacobian matrices for A
+    \item Computation of the Jacobian matrices for A :
     \[
     [\mathbf{D}\mathbf{A}_{l}] \;=\; \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial \theta_l},
     \qquad
     [\mathbf{D}\mathbf{A}_{l'}] \;=\; \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial \theta_{l'}} .
     \]
-    \item Compute the Jacobian matrices for R
+    \item Computation of the Jacobian matrices for R :
     \[
     [\mathbf{D}\mathbf{R}_{l}] \;=\; 
     \mathbf{D}\mathbf{A}_l \, \mathbf{R}_S \, \mathbf{A}(\boldsymbol{\theta})^\dagger
@@ -760,20 +760,20 @@ CRB(\boldsymbol{\theta}) = \mathbf{I}(\boldsymbol{\theta})^{-1}
 
 \paragraph{Implementation\\}
 We implemented the Maximum Likelihood (ML) estimation approach for both cases: when the source 
-signals $s$ are known and when they are unknown. In the case where s is known, the CRB is identical
- for all sources because the signals are assumed perfectly known and uncorrelated, so the only 
- limiting factor is the additive noise. When $s$ is unknown, the CRB is significantly higher, 
- particularly for closely spaced sources, reflecting
- the increased difficulty in separating them due to the correlation between their steering vectors.\\
+signals $s$ are known and when they are unknown. In the case where $s$ is known, the $CRB$ is identical
+for all sources because the signals are assumed perfectly known and uncorrelated, so the only 
+limiting factor is the additive noise. When $s$ is unknown, the $CRB$ is significantly higher, 
+particularly for closely spaced sources, reflecting
+the increased difficulty in separating them due to the correlation between their steering vectors.\\
 
-The Monte Carlo simulations show that the ML estimator is sensitive to initialization and noise. 
+The Monte-Carlo simulations show that the ML estimator is sensitive to initialization and noise. 
 For known signals, the algorithm generally converges even with moderate random perturbations of 
-the initial angles, and the estimation error closely follows the CRB when convergence is achieved. 
+the initial angles, and the estimation error closely follows the $CRB$ when convergence is achieved. 
 When both $s$ and $\sigma^2$ are unknown, convergence is much more difficult. Small deviations in 
 the initial guess can prevent convergence, and only very good initializations or low-noise 
 conditions allow the algorithm to reach the global minimum.\\
 
-Overall, knowing the source signals simplifies the DoA estimation problem and leads to much lower CRB and more robust convergence. When the signals are unknown, estimation is more challenging, especially for closely spaced sources, highlighting the practical need for careful initialization or the use of subspace-based methods to improve performance.
+Overall, knowing the source signals simplifies the DoA estimation problem and leads to much lower $CRB$ and more robust convergence. When the signals are unknown, the estimation is more challenging, especially for closely spaced sources, highlighting the practical need for careful initialization or the use of subspace-based methods to improve performance.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.9\linewidth]{images//Graphics/MLE_graph.jpg}
