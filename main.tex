@@ -169,8 +169,7 @@ As $\mathbf{w}$ and  $\mathbf{a}(\theta_S) $ not random, the expectation is $\in
     {  \mathbf{w}^\dagger \, \mathbf{C}  \,  \mathbf{w}  } = \frac{P_S \, \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta)  \rvert^2}
     { \mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}}
 \end{align*}
-From this expression, the maximization of 
-the $SINR(\mathbf{w})$ is equivalent to the minimization of $\mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}$.
+From this expression, the maximization of the $SINR(\mathbf{w})$ is equivalent to the minimization of $\mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}$.
 
 % -- Question 6 --
 \subsubsection{Minimum Power Distortionless Response (MPDR) filter expression}
@@ -186,13 +185,13 @@ In practice, the matrix $\mathbf{C} $ is not available and cannot even be reliab
  \underset{\mathbf{w}}{\arg \max} \quad SSINR_{out} ( \mathbf{w}) = \frac{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \rvert^2 \bigr)}{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \left( \mathbf{a}(\theta_S) \; s(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \right) \rvert^2 \bigr)}  = \frac{P_S \, \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta)  \rvert^2}
     { \mathbf{w}^\dagger \,\mathbf{R} \, \mathbf{w}}
  \end{equation*}
-The $MPDR$ is Minimum Power Distortionless Response filter satisfies the following expression:
+The Minimum Power Distortionless Response filter $MPDR$ satisfies the following expression:
 
 \begin{equation} \label{eq:MPDRinit}
     \mathbf{w}_{MPDR} = \underset{\mathbf{w}}{\arg \min} \quad \mathbf{w}^\dagger \,\mathbf{R} \, \mathbf{w} 
 \end{equation}
 
-We consider, moreover, that we want to verify the unit constraint $\lvert \mathbf{w}^\dagger\mathbf{a}(\theta_S) \rvert = 1$. We end up with a constrained optimization problem,  which we can solve using the Lagrangian of the problem. Let us define the Lagrangian with respect to $\mathbf{w} \in \mathbb{R}^N$ and $\lambda \in \mathbb{C}$ and its associated problem : 
+We consider, moreover, that we want to verify the unit constraint $\lvert \mathbf{w}^\dagger\mathbf{a}(\theta_S) \rvert = 1$. We end up with a constrained optimization problem,  which can be solve by using the Lagrangian of the problem. Let us define the Lagrangian with respect to $\mathbf{w} \in \mathbb{R}^N$ and $\lambda \in \mathbb{C}$ and its associated problem : 
 
 \begin{align*} 
 \left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\} &= \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathcal{L} ( \lambda ,\, \mathbf{w} ) =  \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathbf{w} ^\dagger \mathbf{R} \, \mathbf{w} + \lambda \left( \mathbf{w}^\dagger \mathbf{a} (\theta_S) - 1 \right) + \lambda^* \left( \mathbf{a} (\theta_S)^\dagger \mathbf{w} - 1 \right)
@@ -205,7 +204,7 @@ To solve the optimization problem, we compute the derivatives of the Lagrangian:
 
 \paragraph*{Step 1: Directional derivative\\}
 
-For any perturbation \(\mathbf{h}\) in \(\mathbf{w}\), the first-order (Taylor) expansion gives:
+For any perturbation \(\mathbf{h}\) in \(\mathbf{w}\), the first-order (Taylor) expansion gives us:
 
 \[
 f(\mathbf{w} + \epsilon \mathbf{h}) = f(\mathbf{w}) + \epsilon \left\langle \mathbf{h}, \frac{\partial f}{\partial \mathbf{w}} \right\rangle + o(\epsilon),
