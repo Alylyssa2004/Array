@@ -1,0 +1,799 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{geometry}
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[section]{placeins}
+\usepackage[T1]{fontenc}
+\usepackage[justification=centering]{caption}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{lipsum, eso-pic, ragged2e, ucs, blindtext, array, amssymb, amsmath, tkz-tab, cleveref, stmaryrd, listings, url, fancyhdr, nomencl, wallpaper, subcaption, graphicx, float, siunitx, mathtools, xcolor, acronym, longtable, multirow, wrapfig, nameref, subcaption, titlesec, bm}
+
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cor}{\mathrm{Cor}}
+\newcommand{\Cov}{\mathrm{Cov}}  
+\newcommand{\Tr}{\mathrm{tr}} 
+
+% ----- PAGE DE GARDE -----
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \includegraphics[width=0.50\textwidth]{images/IPSA_LOGO_2021_QUADRI BASELINE.png}\par\vspace{1cm}
+    
+    {\scshape\LARGE IPSA Toulouse \par}
+    \vspace{1.5cm}
+    
+    {\Huge \textbf{Signal processing for Radar array} \par}
+    \vspace{0.5cm}
+    {\Large \textbf{Project}: Study and implementation of beamforming and DoA estimation techniques \par}
+    \vspace{2cm}
+    
+    {\large\textbf{Authors:} Alyssa ARESSY, Lisa BLASCO, 5TS1 \par}
+    \vspace{0.5cm}
+    {\large\textbf{Supervisor:} Samy LABSIR \par}
+    \vspace{2cm}
+    
+    \vfill
+    {\large 2025 - 2026 \par}
+\end{titlepage}
+
+\section*{Introduction}
+In this report, we consider a network of $N$ ULA antennas that receives $P$ sources with directions $\boldsymbol{\theta}_S=[\theta_1, ..., \theta_P]^\top \in \mathbb{R}^{P}$. First, we will implement the beamforming to identify the source of interest, and in the second part, estimate the directions of arrival of every source by using the DoA estimation methods.
+
+\section{Beamforming techniques}
+
+In this first section, the objective is to implement beamforming techniques by considering a specific scenario. For that, we consider that only one source, at each instant $k\in [\![1,\,K ]\!]$, $s(k)\in\mathbb{C}$ with power $P_S$ and direction, $\mathbf{a}(\theta_S)$ is received by the ULA and corrupted by an interference $i(k)\in\mathbb{C}$, with power $P_I$ and direction $\mathbf{a}_I(\theta_I)$. The signal received by the ULA can be expressed through the expression
+
+\begin{equation} \label{eq:sigdef}
+\mathbf{y}(k) =  \mathbf{a}(\theta_S) \; s(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
+\end{equation}
+with $\mathbf{y}(k),\, \in \mathbb{C}^N $
+
+\begin{equation} \label{eq:interfdef}
+s(k) \sim  \mathcal{N} (0,P_S) \qquad \mathbf{y}_I(k) = \mathbf{a}_I(\theta_I)\, i(k) \qquad i(k) \sim  \mathcal{N} (0,P_I)
+\end{equation}
+We consider a ULA, reception is done over $\theta \in [0,\,2 \pi]$ and the expression of a source direction for such a network is :
+
+\begin{equation} \label{eq:vectath}
+\mathbf{a}(\theta) = \begin{pmatrix} 1\\
+                     \vdots\\
+                     \exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta})} \\
+                     \vdots\\
+                     \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta})} \\
+            \end{pmatrix}
+\end{equation}
+The study is carried out by considering two cases depending on the knowledge of the interference-noise covariance matrix $\mathbf{C}$ and of the signal-interference-noise covariance matrix $\mathbf{R}$.
+
+\subsection{Known covariance matrices}
+
+In the first case, the covariance matrices involved in the problem are assumed to be completely known. Consequently, the matrices  $\mathbf{C}$ and  $\mathbf{R}$ can be computed theoretically and implemented
+without any approximation.
+
+% -- Question 1 --
+\subsubsection{Covariance matrices R and C expression}
+By definition, we have the interference-noise covariance matrix $\mathbf{C}$ and the signal-interference-noise covariance matrix $\mathbf{R}$ :
+\begin{align*}
+    \mathbf{C} & = \sigma^2 \; \mathbf{I} + P_I \;  \mathbf{a}_I(\theta_I) \;  \mathbf{a}_I(\theta_I) ^\dagger =\mathbb{E} \left( \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)\\
+     \mathbf{R} & = \mathbf{C} + P_S \; \mathbf{a}(\theta_S)  \;  \mathbf{a}(\theta_S) ^\dagger   = \mathbb{E} \left( \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)
+\end{align*}
+
+First for $\mathbf{C}$ : 
+\begin{align} \notag
+    \mathbf{C}  & = \mathbb{E} \left( \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right) \\
+    &  \notag= \mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} + \mathbf{y}_I(k)   \mathbf{n}(k) ^{\dagger} + \mathbf{n}(k) \mathbf{y}_I(k)  ^{\dagger} + \mathbf{n}(k)  \mathbf{n}(k) ^{\dagger} \right)\\
+    & = \label{eq:Cmatdebut} \mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) + \mathbb{E} \left( \mathbf{y}_I(k)   \mathbf{n}(k) ^{\dagger} \right) + \mathbb{E} \left( \mathbf{n}(k) \mathbf{y}_I(k)  ^{\dagger} \right) + \mathbb{E} \left( \mathbf{n}(k)  \mathbf{n}(k) ^{\dagger} \right)
+\end{align}
+By assuming independence between the noise and the interference, the crossed terms are $0$ :
+
+\begin{equation*} 
+    \mathbb{E} \left( \mathbf{y}_I(k)  \mathbf{n}(k) ^{\dagger} \right) = \mathbb{E} \left( \mathbf{n}(k) \mathbf{y}_I(k)  ^{\dagger} \right) = 0
+\end{equation*}
+We also know from \autoref{eq:sigdef} that :
+
+\begin{equation*} 
+    \mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) = \mathbb{E} \biggl( \Bigl( \mathbf{a}_I(\theta_I) i(k) \Bigr) \Bigl( \mathbf{a}_I(\theta_I) i(k) \Bigr) ^{\dagger} \biggr) \qquad i(k) \sim  \mathcal{N} (0,P_I)
+\end{equation*}
+As $ \mathbf{a}_I(\theta_I)$ is not random and  $\mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \in \mathbb{R}$: 
+
+\begin{align*} 
+\mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) & = \mathbf{a}_I(\theta_I) \mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I)\\
+& = \mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I) \\
+&   = P_I \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger}  
+\end{align*}
+From \autoref{eq:sigdef} directly with $\mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \mathbf{I})$: $ \notag
+ \mathbb{E} \left( \mathbf{n}(k) \; \mathbf{n}(k) ^{\dagger}\right) = \sigma^2 \mathbf{I}
+$
+Replacing terms in \autoref{eq:Cmatdebut} : 
+
+\begin{equation*}
+  \mathbf{C} = \sigma^2 \mathbf{I} + P_I \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger} 
+\end{equation*}
+Likewise for $\mathbf{R}$, we identify the same terms from $\mathbf{C}$ plus the additional ones : 
+
+\begin{equation*}
+    \mathbf{R} = \mathbb{E} \left( \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger} \right)
+\end{equation*}
+
+\begin{multline*}
+\mathbf{R} =  \mathbf{C} + \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr) ^{\dagger} \Bigr) + 
+    \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \; \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr)^{\dagger}  \Bigr) + \\ \mathbb{E} \Bigl( \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr) \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)^{\dagger}  \Bigr) \\
+\end{multline*}
+By assuming independence between the noise and the signal and independence between the interference and the signal, crossed terms are $0$ and with $\mathbf{a}(\theta_S) $ not random and  $\mathbb{E} \Bigl( s(k) s(k)^{\dagger} \Bigr) \in \mathbb{R}$  : 
+\begin{align*} 
+  \mathbf{R} & =  \mathbf{C} + \mathbb{E} \bigl(  s(k) s(k)^{\dagger} \bigr) \, \mathbf{a}(\theta_S)\,\mathbf{a}(\theta_S)^{\dagger} \qquad s(k) \sim  \mathcal{N} (0,P_S)\\
+   &  =  \mathbf{C} + P_S\, \mathbf{a}(\theta_S)\,\mathbf{a}(\theta_S)^{\dagger}
+\end{align*}
+
+With these equations, we can implement the beamforming techniques. We can note that beamforming only depends on the antenna network geometry, including the positions of antennas, wavelength, and DoA, so we do not need to implement the received signal $\mathbf{y}(t)$ for these techniques.\\
+
+The goal of this part is to compare the different methods. We start by implementing the conventional beamforming $\mathbf{w}_{CBF}$ and verifying the relation between the Signal-Interference-Noise ratios (  $SINR_{out} = N \, SINR_{in}$). 
+Once it is done, we implement the optimal adaptive beamforming $\mathbf{w}_{opt}$ and its $SINR$. We obtain :
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/AdaptiveBF.png}
+    \caption{Adaptive Beamforming}
+    \label{fig:placeholder}
+\end{figure}
+
+\break
+
+Now, we assume that the angle $\theta_S$ is not very well-known and is provided by an estimator
+$\widehat{\theta_S}$. To handle this, it needs to implement both the Minimum Power Distortionless Response ($MVDR$) filter $\mathbf{w}_{MVDR}$ and the Minimum Variance Distortionless Response ($MPDR$) filter $\mathbf{w}_{MPDR}$ , considering that only the matrix $\mathbf{R}$ is known.
+
+% -- Question 5 --
+\subsubsection{Signal-to-Interference and Noise Ratio (SINR) expression}
+ 
+We filter the signal at reception with the filter $\mathbf{w}$. Meaning the received signal is
+
+\begin{equation*}
+\mathbf{y}_R(k) =  \mathbf{w} \; \mathbf{y}(k) = \underbrace{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) }_{signal \; of \; interest } \;  + \; \underbrace{ \mathbf{w}^\dagger \, \left(\mathbf{y}_I(k) + \mathbf{n}(k) \right) }_{interf. \; and  \; noise}  
+\end{equation*}
+The Signal to Interference and Noise Ratio (SINR) is, by definition, a ratio of the \textit{useful} power part (associated with the signal) over the  \textit{lost} part (associated with the noise and the interference). At reception, it can be expressed as : 
+
+\begin{align*} 
+    SINR_{out} ( \mathbf{w})&= \frac{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \rvert^2 \bigr)}{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \left(\mathbf{y}_I(k) + \mathbf{n}(k) \right) \rvert^2 \bigr)} \\
+    &= \frac{ \mathbb{E} \Bigl( \bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \bigr) \, \bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \bigr)^\dagger \Bigr)}
+    { \mathbb{E}  \Bigl( \bigl(  \mathbf{w}^\dagger \, \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \bigr) \bigl(  \mathbf{w}^\dagger \, \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \bigr)^\dagger \Bigr) } \\
+    & = \frac{ \mathbb{E} \Bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) s(k)^\dagger \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w} \Bigr)}
+    { \mathbb{E}  \Bigl(  \mathbf{w}^\dagger \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)^\dagger  \,  \mathbf{w} \Bigr) }
+\end{align*}
+As $\mathbf{w}$ and  $\mathbf{a}(\theta_S) $ not random, the expectation is $\in \mathbb{R}$ and from \autoref{eq:sigdef} and \autoref{eq:interfdef}
+
+\begin{align*} 
+    SINR_{out} ( \mathbf{w})& = \frac{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \,   \mathbb{E} \Bigl( s(k) s(k)^\dagger \Bigr)  \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w}}
+    { \mathbf{w}^\dagger \, \mathbb{E}  \Bigl(  \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)^\dagger \Bigr)  \,  \mathbf{w}  } \\
+    & = \frac{  P_S  \, \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w}}
+    {  \mathbf{w}^\dagger \, \mathbf{C}  \,  \mathbf{w}  } = \frac{P_S \, \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta)  \rvert^2}
+    { \mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}}
+\end{align*}
+From this expression, the maximization of 
+the $SINR(\mathbf{w})$ is equivalent to the minimization of $\mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}$.
+
+% -- Question 6 --
+\subsubsection{Minimum Power Distortionless Response (MPDR) filter expression}
+
+We want to maximize $SINR(\mathbf{w})$. This is equivalent to solving the problem : 
+
+\begin{equation*} 
+    \underset{\mathbf{w}}{\arg \max} \quad SINR(\mathbf{w}) = \underset{\mathbf{w}}{\arg \min}  \quad  \mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w} 
+\end{equation*}
+In practice, the matrix $\mathbf{C} $ is not available and cannot even be reliably estimated. Therefore, we must work with  $\mathbf{R}$, and our objective becomes to maximize the $SSINR$:
+
+\begin{equation*} 
+ \underset{\mathbf{w}}{\arg \max} \quad SSINR_{out} ( \mathbf{w}) = \frac{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \rvert^2 \bigr)}{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \left( \mathbf{a}(\theta_S) \; s(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \right) \rvert^2 \bigr)}  = \frac{P_S \, \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta)  \rvert^2}
+    { \mathbf{w}^\dagger \,\mathbf{R} \, \mathbf{w}}
+ \end{equation*}
+The $MPDR$ is Minimum Power Distortionless Response filter satisfies the following expression:
+
+\begin{equation} \label{eq:MPDRinit}
+    \mathbf{w}_{MPDR} = \underset{\mathbf{w}}{\arg \min} \quad \mathbf{w}^\dagger \,\mathbf{R} \, \mathbf{w} 
+\end{equation}
+
+We consider, moreover, that we want to verify the unit constraint $\lvert \mathbf{w}^\dagger\mathbf{a}(\theta_S) \rvert = 1$. We end up with a constrained optimization problem,  which we can solve using the Lagrangian of the problem. Let us define the Lagrangian with respect to $\mathbf{w} \in \mathbb{R}^N$ and $\lambda \in \mathbb{C}$ and its associated problem : 
+
+\begin{align*} 
+\left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\} &= \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathcal{L} ( \lambda ,\, \mathbf{w} ) =  \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathbf{w} ^\dagger \mathbf{R} \, \mathbf{w} + \lambda \left( \mathbf{w}^\dagger \mathbf{a} (\theta_S) - 1 \right) + \lambda^* \left( \mathbf{a} (\theta_S)^\dagger \mathbf{w} - 1 \right)
+\end{align*}
+To solve the optimization problem, we compute the derivatives of the Lagrangian:
+
+\[
+\mathcal{L}(\lambda, \mathbf{w}) = \mathbf{w}^\dagger \mathbf{R} \, \mathbf{w} + \lambda \left( \mathbf{w}^\dagger \mathbf{a}(\theta_S) - 1 \right) + \lambda^* \left( \mathbf{a}(\theta_S)^\dagger \mathbf{w} - 1 \right)
+\]
+
+\paragraph*{Step 1: Directional derivative\\}
+
+For any perturbation \(\mathbf{h}\) in \(\mathbf{w}\), the first-order (Taylor) expansion gives:
+
+\[
+f(\mathbf{w} + \epsilon \mathbf{h}) = f(\mathbf{w}) + \epsilon \left\langle \mathbf{h}, \frac{\partial f}{\partial \mathbf{w}} \right\rangle + o(\epsilon),
+\]
+where \(\langle \mathbf{h}, \mathbf{v} \rangle = \mathbf{h}^\dagger \mathbf{v}\) denotes the Hermitian scalar product. We apply this to the two relevant terms:
+
+\begin{enumerate}
+    \item Quadratic term:
+    \[
+    f_1(\mathbf{w}) = \mathbf{w}^\dagger \mathbf{R} \mathbf{w}
+    \]
+    Expanding in the direction \(\mathbf{h}\):
+    \[
+    f_1(\mathbf{w} + \epsilon \mathbf{h}) = (\mathbf{w} + \epsilon \mathbf{h})^\dagger \mathbf{R} (\mathbf{w} + \epsilon \mathbf{h}) 
+    = \mathbf{w}^\dagger \mathbf{R} \mathbf{w} + \epsilon \mathbf{h}^\dagger \mathbf{R} \mathbf{w} + \epsilon \mathbf{w}^\dagger \mathbf{R} \mathbf{h} + \mathcal{O}(\epsilon^2)
+    \]
+    The derivative with respect to \(\mathbf{w}\) is:
+    \[
+    \frac{\partial f_1}{\partial \mathbf{w}} = \mathbf{R} \mathbf{w}
+    \]
+
+    \item Linear constraint term:
+    \[
+    f_2(\mathbf{w}) = \lambda^* (\mathbf{a}(\theta_S)^\dagger \mathbf{w} - 1)
+    \]
+    Directional derivative:
+    \[
+    f_2(\mathbf{w} + \epsilon \mathbf{h}) = \lambda^* (\mathbf{a}(\theta_S)^\dagger (\mathbf{w} + \epsilon \mathbf{h}) - 1) = f_2(\mathbf{w}) + \epsilon \lambda^* \mathbf{a}(\theta_S)^\dagger \mathbf{h} + \mathcal{O}(\epsilon^2)
+    \]
+    so that,
+    \[
+    \frac{\partial f_2}{\partial \mathbf{w}} = \lambda^* \mathbf{a}(\theta_S)
+    \]
+\end{enumerate}
+
+\paragraph*{Step 2: Derivative of the Lagrangian\\}
+
+Combining the terms, we obtain:
+\[
+\frac{\partial \mathcal{L}(\lambda, \mathbf{w})}{\partial \mathbf{w}} = \mathbf{R} \mathbf{w} + \lambda^* \mathbf{a}(\theta_S).
+\]
+The derivative with respect to the Lagrange multiplier \(\lambda\) is straightforward:
+
+\[
+\frac{\partial \mathcal{L}(\lambda, \mathbf{w})}{\partial \lambda} = \mathbf{w}^\dagger \mathbf{a}(\theta_S) - 1.
+\]
+Lagrange conditions give us that the problem solutions are  $\left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\}$ solutions of 
+
+\begin{align*} 
+    & \left\{  
+    \begin{aligned}
+        & \left.\frac{ \partial  \mathcal{L} ( \lambda ,\, \mathbf{w} )}{\partial \lambda} \right|_{\lambda = \tilde{\lambda} , \, \mathbf{w} =  \tilde{\mathbf{w}}  } = 0 \\
+        & \left.\frac{ \partial  \mathcal{L} ( \lambda ,\, \mathbf{w} )}{\partial \mathbf{w}} \right|_{\lambda = \tilde{\lambda} , \, \mathbf{w} =  \tilde{\mathbf{w}}  }  = 0 \\
+    \end{aligned}
+    \right.\\
+    &\Leftrightarrow \left\{  
+    \begin{aligned}
+        &  \mathbf{R}  \, \tilde{\mathbf{w}} \, + \, \tilde{\lambda} ^*  \mathbf{a} (\theta_S) = 0 \\
+        &   \tilde{\mathbf{w}} ^\dagger \mathbf{a} (\theta_S) - 1  = 0\\
+    \end{aligned}
+    \right.\\
+    &\Leftrightarrow \left\{  
+    \begin{aligned}
+        &   \tilde{\mathbf{w}} = - \tilde{\lambda}^* \,  \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)  \\
+        & - \tilde{\lambda}^* = \frac{1}{\mathbf{a} (\theta_S)^\dagger \, \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)} \\
+    \end{aligned}
+    \right.
+\end{align*}
+Substituting the second equation in the first one, the $MPDR$ filter solution of \autoref{eq:MPDRinit}
+
+\begin{equation*}
+\mathbf{w}_{MPDR} = \tilde{\mathbf{w}} =\frac{\mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}{\mathbf{a} (\theta_S)^\dagger \, \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}
+\end{equation*}
+\break
+Now that the expressions of the filters and of the  are computed, we can implement the two approaches by assuming the error between the true angle and the estimated angle is equal to $2^\circ$, and compare them to the Conventional and Adaptive beamforming :
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/comparison_BF_PARTI.png}
+    \caption{Comparison of Beamforming Approaches}
+    \label{fig:placeholder}
+\end{figure}
+
+We notice that around $\theta_s=20^\circ$ the four methods exhibit a strong peak, which corresponds to the direction of the desired signal. This peak represents the main beam of the array response and indicates that each beamforming successfully steers its gain toward the target source.  
+A sharp drop appears around $\theta_i=30°$ which corresponds to the direction of the interfering source. The deeper the drop, the more effective the beamforming is in canceling the interference. Adaptive, MVDR, and MPDR achieve strong interference suppression, whereas the Conventional Beamformer (CBF) produces a much shallower null. 
+
+\subsection{Unknown covariance matrices}
+In the second case, we explore a more realistic scenario where the matrices C and R are
+unknown and must be estimated. To accomplish this, we need to collect multiple snapshots
+of the received signal, denoted as \( \mathbf{Y} = \{ \mathbf{y}(k)\}_{k \in [\![1,\, K]\!]} \), at different time instances. Typically, the covariance 
+matrices are estimated using:
+\begin{align*}
+\widehat{\mathbf{C}} & = \frac{1}{K} \sum_{k=1}^{K} \bigl( (\mathbf{y}_I(k) + \mathbf{n}(k) ) (\mathbf{y}_I(k) + \mathbf{n}(k) )^\dagger \bigr)\\
+\widehat{\mathbf{R}} & = \frac{1}{K} \sum_{k=1}^{K} \mathbf{y}(k) \; \mathbf{y}(k) ^\dagger
+\end{align*}
+
+We are now interested in implementing and analyzing beamforming approaches based on
+these estimations.
+
+% -- Question 9 -- 
+\subsubsection{Noise probability density reformulation}
+
+We have $\mathbf{n}(k) \sim  \mathcal{CN}(0, \, \sigma^2 \; \mathbf{I} )  $ with $\mathcal{CN}$ the complex normal distribution:
+
+\begin{equation} \label{eq:compnorm} 
+\frac{1}{\pi^N\; \lvert \boldsymbol{\Sigma} \rvert} \; \exp^{- ( \mathbf{n}(k) -  \mathbf{m}) ^\dagger \, \boldsymbol{\Sigma}^{-1} \, (  \mathbf{n}(k) -  \mathbf{m})}
+\end{equation}
+From there, applying specifically for the studied case with $\mathbf{m} = 0$ and $ \boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$
+\begin{equation*}
+p(\mathbf{n}(k)) = \frac{1}{(\pi \, \sigma^2 )^N} \; \exp^{- \frac{1}{\sigma^2} \mathbf{n}(k) ^\dagger \mathbf{n}(k)}
+\end{equation*}
+We want to separate the real and imaginary parts of this signal to simplify the problem with  $\mathbf{n}(k) = \mathbf{n}_{re}(k)  + j\, \mathbf{n}_{im}(k)$ where $\mathbf{n}_{re}(k) \in \mathbb{R}^N$ and $\mathbf{n}_{im}(k) \in \mathbb{R}^N$. Under these assumptions, $\mathbf{n}(k)$ hermitian norm becomes:
+\begin{equation*}
+\mathbf{n}(k)^\dagger \, \mathbf{n}(k)  = (\mathbf{n}_{re}(k)  -  j\, \mathbf{n}_{im}(k) ) \,(  \mathbf{n}_{re}(k)  + j\, \mathbf{n}_{im}(k)) = \lVert \mathbf{n_{re}}(k) \rVert^2 +  \lVert \mathbf{n}_{im}(k) \rVert^2
+\end{equation*}
+We replace :
+\begin{align*}
+p(\mathbf{n}(k)) & = \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \exp^{- \frac{1}{\sigma^2} (\lVert \mathbf{n_{re}}(k) \rVert^2 +  \lVert \mathbf{n}_{im}(k) \rVert^2)  }\\
+& = \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n_{re}}(k) \rVert^2  }  \times \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \; \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n}_{im}(k) \rVert^2  }
+\end{align*}
+The real vectorial Gaussian for $\mathcal{N}(\mathbf{m}_0, \; \sigma_0^2 \, \mathbf{I})$ the distribution being 
+
+\begin{equation*}
+p(\mathbf{x})  = \frac{1}{(2\,\pi \, \sigma_0^2 )^{N/2}} \exp^{- \frac{1}{ 2 \, \sigma_0^2 } \lVert \mathbf{x} - \mathbf{m}_0\rVert^2  }
+\end{equation*}
+We arrive at the separation in a product of two real gaussian:
+
+\begin{equation*}
+p(\mathbf{n}(k))  = \mathbf{n_{re}}(k) \; \mathbf{n_{im}}(k) =  \mathcal{N}(0, \, \frac{\sigma^2}{2}\mathbf{I} )  \;\mathcal{N}(0, \, \frac{\sigma^2}{2} \mathbf{I}) 
+\end{equation*}
+
+\break
+
+After implementing the received signal $y(k) \qquad \forall k \in [\![1,\, K]\!]$ :
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/sreceived_signal.png}
+    \caption{Received signal}
+    \label{fig:placeholder}
+\end{figure}
+
+This allows us to implement the new $MVDR$ and $MPDR$ filters with the matrices $R$ and $C$ unknown. By computing the errors, we obtain :
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/errors_C_R_unknown.png}
+    \caption{Comparison error of $MVDR$ and $MPDR$}
+    \label{fig:placeholder}
+\end{figure}
+
+We see that the errors of the new filters converged to the filters where $R$ and $C$ were known. Overall, the $MPDR$ filter has higher error values and converges more slowly than the $MVDR$ filter. To compare them further, we calculate the $SINR$ of the two methods over $50$ Monte-Carlo realizations. For this, we consider $R$ and $C$ known. We obtain:
+
+\break
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/SINR_mvdr_mpdr.png}
+    \caption{Comparison SINR for MVDR and MPDR}
+    \label{fig:placeholder}
+\end{figure}
+
+The mean $SINR$ over the $50$ realizations for the two methods converges to the real values of $SINR$: as $K$ increases, noise in the sample covariance estimate decreases, so the estimated beamformer weights approach the optimal ones. $MVDR$ reaches a much higher $SINR$ than $MPDR$ and converges faster, confirming its superior interference suppression capability.
+
+
+\subsubsection{Robust MPDR}
+We implement the Robust MPDR filter, which is a form of MPDR where a factor $\mu$ is added to $R$, for $\mu = [0, 1e^{-5}, 1e^{-4}, 1e^{-3}, 1e^{-2},1e^{-1}, 1]$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{images//Graphics/Robust_MPDR.png}
+    \caption{Comparison MVDR, MPDR, and Robust MPDR}
+    \label{fig:placeholder}
+\end{figure}
+When we examine the standard deviation along the diagonal of $R$, we find values of about $0.0089$ on average across all Monte Carlo runs. 
+If we then introduce the $\mu$ factor and set it too large (on the order of 1), its contribution becomes dominant—around $11{,}000\,\%$. 
+In this case, all diagonal terms become nearly identical, which degrades performance because the algorithm can no longer distinguish 
+differences in the covariance values.\\
+
+Conversely, if $\mu$ is too small (around $10^{-5}$), its contribution represents only about $0.11\,\%$. Its effect is therefore negligible, and no improvement 
+is observed in the beamformer’s performance.\\
+
+With more moderate values of $\mu$ (e.g., $10^{-3}$ in this case), the contribution is around $11\,\%$. 
+This increases the overall diagonal, improving matrix conditioning and stability during inversion, while still preserving enough variation 
+to distinguish between entries.  We also note that for $\mu = 0$, the SINR of the robust MPDR collapses to the classic MPDR value, and 
+if $\mu$ is too large, the SINR drops. \\
+
+Therefore, to improve MPDR performance, $\mu$ values between $10^{-4}$ and $10^{-2}$ are recommended. 
+Overall, this method helps accelerate convergence and improve the accuracy of the MPDR algorithm.
+
+\break
+
+\section{Implementation of DoA estimation techniques}
+
+In this section, we will implement the various DoA estimation techniques. To achieve this, we assume a new scenario where the ULA network receives three unknown sources with directions \( \boldsymbol{\theta}_S = [\theta_1, \, \theta_2, \, \theta_3 ]^\top\). The simulation parameters remain unchanged. The primary modification is that we now consider $P = 3$ sources with $\theta_1$ = $-25^\circ$, $\theta_2$ = $20^\circ$, $\theta_3$ = $25^\circ$, and $\mathbf{P}_S = 10$. As previously, the matrices $ \mathbf{C}$ and $ \mathbf{R}$ are estimated and $K$ is fixed to $500$. Additionally, we assume the presence of interference. Consequently, the signal is modeled by:
+\begin{equation} \label{eq:sigdefpart2}
+\mathbf{y}(k) =  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
+\end{equation}
+with $\mathbf{A}(\boldsymbol{\theta}_S) = [\mathbf{a}(\theta_1) ,\,\mathbf{a}(\theta_2) , \, \mathbf{a}(\theta_3) ]$ and for each $k$ $\mathbf{s}(k) \in \mathbb{C}^3$. 
+
+\subsection{Implementation of non-parametric approaches}
+
+% -- Question 1 -- 
+% \paragraph{Question 1 - Define "non-parametric"}
+
+Non-parametric methods do not assume a specific model for the source signals—they work directly with the output power received after beamforming.
+We start by implementing the two methods based on the conventional $\mathbf{w}_{CBF}$ and adaptive beamforming with Capon's method $\hat{\mathbf{w}}_{MPDR}$, with interferences. We obtain:
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images//Graphics/Conventional_Capon_21.png}
+         \caption[subcaption 1]{For $\theta_3=21°$}
+         \label{fig:coarseSunsen}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images//Graphics/Conventional_Capon.png}
+         \caption[subcaption 2]{For $\theta_3=25°$}
+         \label{fig:fineSunSen}
+     \end{subfigure}
+    \caption{Conventional and Capon comparison}
+    \label{fig:IntrSunSensors}
+\end{figure}
+We can see that both methods show spectral peaks at the true angles of arrival, indicated by the dashed vertical lines. However, the Capon exhibits much sharper and narrower peaks than the conventional method. This means $MVDR$ is more effective at separating closely spaced sources. The conventional beamformer has large side lobes while the $MVDR$ suppresses them, dropping more than $40$ dB below the main peaks. The $MVDR$ spectrum includes deep nulls at the positions of interferers, unlike the conventional method. This is a signature of adaptive beamforming: $MVDR$ actively cancels interference while preserving the desired signal.When the third source has $\theta_3=21$°, we see that the second and third DoA are not accurately separated. The methods are not precise enough.
+
+\subsection{Implementation of parametric approaches}
+
+\subsubsection{MUSIC method}
+
+% -- Question 4 --
+%\paragraph{Question 4 - why is MUSIC parametric}
+
+In the MUSIC method, we assume the structure of the signal covariance matrix $\mathbf{R}  = \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger + \sigma^2 \, \mathbf{I} $. This is considered prior information, so that this method can be considered parametric.
+
+% -- Question 5 --
+\paragraph{Power expression with the MUSIC approach\\}
+
+We first assume: $\mathbf{R}  = \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger + \sigma^2 \, \mathbf{I} $
+
+We decompose $\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger$ into an orthonormal basis of eigenvectors \( \{{\mathbf{u}_i}\}_{i\,\in\,[\![1;N ]\!]} \). $\mathbf{U}$ composed of all $\mathbf{u}_i$ , then gives the following equation : 
+
+\begin{equation*}
+\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger = \mathbf{U} \, \Lambda  \, \mathbf{U}^\dagger
+\end{equation*}
+where $\Lambda$ is the diagonal matrix of the eigenvalues $\lambda_i$  associated with the eigenvectors $\mathbf{u}_i$. The matrix $\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger$ is of rank $P$, which means that (in descending order) the $P$ first eigenvalues are non-zero, and the $N-P$ others are null. By separating $\mathbf{U}$ into two separate parts  $\mathbf{U}_S = [\mathbf{u}_1, \cdots,\mathbf{u}_P] $ and  $\mathbf{U}_N = [\mathbf{u}_{P+1}, \cdots,\mathbf{u}_N] $, we have :
+
+\begin{equation*} \label{eq:generatrice} \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger = \sum_{p=1}^{P} \lambda_p \, \mathbf{u}_p \mathbf{u}_p^\dagger = \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger 
+\end{equation*}
+And then, the orthogonality of the matrix $U_N$ (from the SVD definition) yields to :
+
+\begin{equation} \label{eq:Rform}
+\mathbf{R} =  \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger + \sigma^2  \mathbf{U}_N \, \mathbf{U}_N^\dagger
+\end{equation}
+To compute the estimated power, \autoref{eq:generatrice} gives us that both $\mathbf{a}(\theta_S)$ and $\mathbf{U}_S$ generate the same space, meaning they are different bases but for the same space. Then, as we know $\mathbf{U}_S \perp \mathbf{U}_N $, we also have  $\mathbf{a}(\theta_S) \perp \mathbf{U}_N$. We then have $\mathbf{a}(\theta_S)^\dagger \cdot \mathbf{U}_N = 0$
+Numerically, a power is the sum of the energies of the studied signal. Here in the complex in the considered subspace, it can be written sum $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
+
+\begin{equation*}
+P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \mathbf{U}_S \mathbf{U}_S^\dagger \; \mathbf{a}(\theta_S)}
+\end{equation*}
+From our assumption, we determine $\widehat{\mathbf{U}}_S$ from $\mathbf{R}$. In reality, we do not have access to $\mathbf{R}$ so we have to estimate it from a distribution. Meaning $\mathbf{R}$ becomes $\widehat{\mathbf{R}}$ and $\mathbf{U}_S$ becomes $\widehat{\mathbf{U}}_S$:
+
+\begin{equation*}
+P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \widehat{\mathbf{U}}_S \widehat{\mathbf{U}}_S^\dagger \; \mathbf{a}(\theta_S)}
+\end{equation*}
+We implement this method with interferences. We set $\theta$ between $[-100^\circ, +100^\circ]$.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images//Graphics/Music_Capon.png}
+    \caption{Comparison Music and Capon}
+    \label{fig:placeholder}
+\end{figure}
+
+$MUSIC$ shows very sharp, narrow peaks aligned with the true DoAs. This is expected because $MUSIC$ exploits the orthogonality between the noise subspace and the array steering vectors. As a result, $MUSIC$ can separate closely spaced sources even when conventional or $MVDR$ beamforming struggles. On the other side, $MVDR$ also shows peaks at the correct DoAs, but the peaks are wider, less pronounced, and sometimes slightly shifted depending on estimation noise. So, overall, $MUSIC$ exhibits a stronger discrimination capability.\\
+
+We added interferences, and $MVDR$ shows a suppressed response near the interference DoA, because it tries to place a null while maintaining gain toward the desired direction, but Music does not. Which leads us to say that Music is a detection or estimation technique, while $MVDR$ is also more of a beamforming or filtering technique.
+
+\subsubsection{Maximum Likelihood method}
+
+Now, we propose to implement the parametric approach based on the maximization of the
+likelihood so that:
+\begin{equation} \label{eq:argmaxx}
+\boldsymbol{\theta}_S = \underset{\boldsymbol{\theta}_S}{\arg \max} \quad p(\mathbf{Y} | \boldsymbol{\theta}_S) \qquad \mathbf{Y} = \{ \mathbf{y}(1), \cdots , \, \mathbf{y}(K) \}
+\end{equation}
+Particularly, we propose to study the deterministic likelihood approach, which assumes that $s(k)$ is not random.
+
+% -- Question 8 --
+\paragraph{1. When $s$ and $\sigma^2$ are known}
+
+\subparagraph{Theorical estimator expression\\}
+
+From \autoref{eq:sigdefpart2}, when $\mathbf{s}(k)$ modeling is known : 
+\begin{equation*}
+\mathbf{y}(k) = \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) +  \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\; \sigma^2 \; \mathbf{I} )\qquad \Leftrightarrow \qquad \mathbf{y}(k) \sim  \mathcal{CN} (\mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k), \;\sigma^2 \; \mathbf{I} )
+\end{equation*}
+
+The equation \autoref{eq:argmaxx} then classically becomes :
+
+\begin{align*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML1} &= \underset{\boldsymbol{\theta}_S}{\arg \max} \quad p(\mathbf{Y} | \boldsymbol{\theta}_S) = \underset{\boldsymbol{\theta}_S}{\arg \min}\quad - \ln  p(\mathbf{Y} | \boldsymbol{\theta}_S)\\
+&= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad - \ln \Bigl( \prod_{k=1}^{K} p(\mathbf{y}(k) | \boldsymbol{\theta}_S) \Bigr)
+\end{align*}
+Supposing independence and replacing with the complex Gaussian from \autoref{eq:compnorm} : 
+
+\begin{equation*} \label{eq:argmaxbase}
+\widehat{\boldsymbol{\theta}}_{S,\, ML1}  = \underset{\boldsymbol{\theta}_S}{\arg \min}\quad - \ln \prod_{k=1}^{K} \Bigl( \frac{1}{\pi^N\; \lvert \boldsymbol{\Sigma} \rvert} \; \exp^{- \frac{1}{\sigma^2}( \mathbf{y}(k) -  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) ) ^\dagger\, (  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) )} \Bigr)
+\end{equation*}
+All terms independent in $\boldsymbol{\theta}_S$ do not influence the $\arg \min$, they are only a constant with respect to this problem. Let's develop by simplifying them :
+\begin{align*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML1}  &= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad - \sum_{k=1}^{K} \Bigl( - \frac{1}{\sigma^2}( \mathbf{y}(k) -  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) ) ^\dagger\, (  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) ) \Bigr)\\
+&= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad \sum_{k=1}^{K} \Bigl(( \mathbf{y}(k) -  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) ) ^\dagger\, (  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) ) \Bigr)\\
+&= \underset{\boldsymbol{\theta}_S}{\arg \min} \quad \sum_{k=1}^{K} \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2\\
+\end{align*}
+
+When $s$ is known, this expression can be computed directly because $\mathbf{y}(k)$ is the received signal, $A(\theta)$ is by design. A Gauss-Newton algorithm can solve for our only unknown $\theta_S$.
+
+\subparagraph{Cramér-Rao Bound expression\\}
+
+% A est de taille N * P
+To find the expression of the $CRB$,  we use the Slepian Bangs formula. The general expression of the Fisher information matrix terms $\forall l \in [\![1, \,P]\!] , \forall l' \in [\![1, \,P]\!]$ considering \( \mathbf{y}(k) \sim  \mathcal{CN} \Bigl(  \boldsymbol{\mu}_k(x) , \boldsymbol{\Sigma}(x) \Bigr)\) is : 
+\begin{equation*}
+[\mathbf{I}(x)]_{l,l'} = 2 \sum_{k=1}^{K} \mathrm{Re} 
+\left( \frac{\partial \boldsymbol{\mu}_k(x) }{\partial (x)_l}^{\dagger} \, \boldsymbol{\Sigma}(x)^{-1} \, \frac{\partial \boldsymbol{\mu}_k(x) }{\partial(x)_{l'}} \right)
++ K \, \mathrm{tr} \left(
+\boldsymbol{\Sigma}(x)^{-1} \frac{\partial \boldsymbol{\Sigma}(x)}{\partial (x)_l} \boldsymbol{\Sigma}(x)^{-1} \frac{\partial \boldsymbol{\Sigma}(x)}{\partial (x)_{l'}}
+\right)
+\end{equation*}
+In our case, we have $ \boldsymbol{\mu}_k(\boldsymbol{\theta})  = \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) $ and $\boldsymbol{\Sigma}(\boldsymbol{\theta}) =\sigma^2 \; \mathbf{I}$ independent from  $\boldsymbol{\theta}$ (derivatives are 0), so that it simplifies to the first (mean) term only:
+
+\begin{equation*}
+[\mathbf{I}(\boldsymbol{\theta}_S)]_{l,l'} 
+= 
+\frac{2}{\sigma^2}
+\sum_{k=1}^{K}
+\mathrm{Re}\!\left(
+\frac{\partial \boldsymbol{\mu}_k(\boldsymbol{\theta}_S)}{\partial (\boldsymbol{\theta}_S)_l}^{\dagger}
+\,
+\frac{\partial \boldsymbol{\mu}_k(\boldsymbol{\theta}_S)}{\partial (\boldsymbol{\theta}_S)_{l'}}
+\right)
+\end{equation*}
+Using \( \boldsymbol{\mu}_k(\boldsymbol{\theta}_S)=\mathbf{A}(\boldsymbol{\theta}_S)\mathbf{s}(k)
+\),we obtain
+
+\begin{equation*}
+\frac{\partial \boldsymbol{\mu}_k(\boldsymbol{\theta}_S)}{\partial (\boldsymbol{\theta}_S)_l}
+=
+\frac{\partial \mathbf{A}(\boldsymbol{\theta}_S)}{\partial (\boldsymbol{\theta}_S)_l}
+\mathbf{s}(k)
+=
+\mathbf{D}\mathbf{A}_l \, \mathbf{s}(k)
+\end{equation*}
+so that the Fisher Information Matrix entries become
+
+\begin{equation*}
+[\mathbf{I}(\boldsymbol{\theta}_S)]_{l,l'}
+=
+\frac{2}{\sigma^2}
+\sum_{k=1}^{K}
+\mathrm{Re}\!\left(
+\mathbf{s}(k)^\dagger \,
+\mathbf{D}\mathbf{A}_l^\dagger \,
+\mathbf{D}\mathbf{A}_{l'} \,
+\mathbf{s}(k)
+\right).
+\end{equation*}
+Finally, the Cramér–Rao Bound for this case is given by
+
+\begin{equation*}
+\mathrm{CRB}(\boldsymbol{\theta}_S)
+=
+\mathbf{I}(\boldsymbol{\theta}_S)^{-1}.
+\end{equation*}
+
+\paragraph{2. When $s$ and $\sigma^2$ are unknown}
+
+\subparagraph{Theorical estimator expression\\}
+
+When neither $s$ nor $\sigma^2$ are known, the terms with $\sigma^2$ that we integrated in the constant for the development above now have to be considered. By developing from \autoref{eq:argmaxbase} like above, we end up with 
+
+\begin{equation*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2, \, \mathbf{s}(k)}{\arg \min}\quad - K \ln \Bigl( \frac{1}{\pi^N\; \lvert \boldsymbol{\Sigma} \rvert} \Bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K}  \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2
+\end{equation*}
+With $\boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$, we have $\lvert \boldsymbol{\Sigma} \rvert = \sigma^{2\,N} $ , and the term in $\pi$ is still a constant for the minimization
+
+\begin{equation} \label{eq:thml2base}
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2, \, \mathbf{s}(k)}{\arg \min}\quad KN \ln \bigl( \sigma^2 \bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K} \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2
+\end{equation}
+First, we minimize with respect to $\mathbf{s}(k)$ is a classical linear least–squares problem, so it can be expressed easily: 
+
+\begin{align*}
+\widehat{ \mathbf{s} }(k) & = \underset{\mathbf{s}(k)}{\arg \min} \quad \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2 = \underset{\mathbf{s}(k)}{\arg \min} \quad \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)^\dagger \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)
+\end{align*}
+The normal equation directly gives:
+
+\begin{equation*}
+\widehat{ \mathbf{s} }(k) = \bigl( \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \mathbf{A}(\boldsymbol{\theta}_S) \bigr) ^{-1} \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \, \mathbf{y}(k)
+\end{equation*}
+This estimator is the unique vector whose image through $\mathbf{A}(\boldsymbol{\theta}_S)$ is the orthogonal projection of $ \mathbf{y}(k)$ onto the column space of $\mathbf{A}(\boldsymbol{\theta}_S)$. This defines the orthogonal projector and complement are:
+
+\begin{equation*}
+\mathbf{P_A}(\boldsymbol{\theta}_S)  = \mathbf{A}(\boldsymbol{\theta}_S)  \; \bigl( \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \mathbf{A}(\boldsymbol{\theta}_S) \bigr) \; \mathbf{A}(\boldsymbol{\theta}_S)^\dagger  \qquad \text{and} \qquad \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,= \mathbf{I} - \mathbf{P_A}(\boldsymbol{\theta}_S) 
+\end{equation*}
+With these defined, the vector fitted to this particular subspace becomes $\widehat{\mathbf{y}}(k) = \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) = \mathbf{P_A}(\boldsymbol{\theta}_S) \mathbf{y}(k)$. Thus, the solution becomes:
+
+\begin{equation*}
+ \underset{\mathbf{s}(k)}{\arg \min} \quad\lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2 = \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)
+\end{equation*}
+After projecting out the signal subspace, the log-likelihood from \autoref{eq:thml2base} becomes - now independent from $\mathbf{s}(k)$ : 
+
+\begin{equation*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2}{\arg \min}\quad KN \ln \bigl( \sigma^2 \bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K} \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)
+\end{equation*}
+With respect to $\sigma^2$ it takes the form:
+
+\begin{equation*}
+f(\sigma^2)=A\ln(\sigma^2)+\frac{B}{\sigma^2} \quad \text{with} \quad A=KN,\quad B=\sum_{k=1}^{K}\mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S)\,\mathbf{y}(k)
+\end{equation*}
+Differentiating with respect to $\sigma^2$ and setting the derivative to zero gives
+
+\begin{equation*}
+\frac{\partial f}{\partial \sigma^2} = \frac{A}{\sigma^2}-\frac{B}{(\sigma^2)^2}=0
+\quad\Longrightarrow\quad \widehat{\sigma}^2=\frac{B}{A}
+\end{equation*}
+Substituting this expression back into the likelihood removes all terms independent of $\boldsymbol{\theta}_S$. Therefore, the maximum likelihood estimator of $\boldsymbol{\theta}_S$ is obtained by minimizing
+
+\begin{equation*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S}{\arg\min} \quad \frac{1}{K}\sum_{k=1}^{K} \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S)\, \mathbf{y}(k)
+\end{equation*}
+We use that  $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\, \mathbf{y}(k) \in \mathbb{C}$ to replace with $ \mathbf{y}(k)^\dagger\, \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \,\,  \mathbf{y}(k) = \Tr (  \mathbf{y}(k)^\dagger \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \mathbf{y}(k)) $ , and as $\Tr$ is a circular operator, the equality extends to $= \Tr ( \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \,\mathbf{y}(k) \,\mathbf{y}(k)^\dagger)$. We then have by linearity of both sum and Tr : 
+
+\begin{align*}
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} &= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad \frac{1}{K}\sum_{k=1}^{K} \Tr \Bigl(\mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \,\mathbf{y}(k) \,\mathbf{y}(k)^\dagger \Bigr)\\
+&= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad  \Tr \Bigl( \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \, \underset{ \widehat{\mathbf{R}}}{ \underbrace{\frac{1}{K} \sum_{k=1}^{K}  \mathbf{y}(k) \, \mathbf{y}(k)^\dagger }} \Bigr)\\
+\widehat{\boldsymbol{\theta}}_{S,\, ML2} &= \underset{\boldsymbol{\theta}_S}{\arg \min}\quad  \Tr \Bigl( \mathbf{P}_A^\perp(\boldsymbol{\theta}_S) \, \, \widehat{\mathbf{R}} \Bigr)
+\end{align*}
+with $\mathbf{P}_A^\perp(\boldsymbol{\theta}_S)  = \mathbf{I} - \mathbf{A} (\boldsymbol{\theta}_S) \bigl( \mathbf{A} (\boldsymbol{\theta}_S)^\dagger\; \mathbf{A} (\boldsymbol{\theta}_S) \bigr)^{-1} \mathbf{A} (\boldsymbol{\theta}_S)^\dagger$
+
+\subparagraph{Cramér-Rao Bound expression\\}
+% A est de taille N * P
+To find the expression of the $CRB$,  we use the Slepian Bangs formula. The general expression of the Fisher information matrix terms $\forall l \in [\![1, \,P]\!] , \forall l' \in [\![1, \,P]\!]$ considering \( \mathbf{y}(k) \sim  \mathcal{CN} \Bigl(  \boldsymbol{\mu}_k(x) , \boldsymbol{\Sigma}(x) \Bigr)\) is : 
+\begin{equation*}
+[\mathbf{I}(x)]_{l,l'} = 2 \sum_{k=1}^{K} \mathrm{Re} 
+\left( \frac{\partial \boldsymbol{\mu}_k(x) }{\partial (x)_l}^{\dagger} \, \boldsymbol{\Sigma}(x)^{-1} \, \frac{\partial \boldsymbol{\mu}_k(x) }{\partial(x)_{l'}} \right)
++ K \, \mathrm{tr} \left(
+\boldsymbol{\Sigma}(x)^{-1} \frac{\partial \boldsymbol{\Sigma}(x)}{\partial (x)_l} \boldsymbol{\Sigma}(x)^{-1} \frac{\partial \boldsymbol{\Sigma}(x)}{\partial (x)_{l'}}
+\right)
+\end{equation*}
+
+In our case, we have $ \boldsymbol{\mu}_k(\boldsymbol{\theta})  = 0 $ and $\boldsymbol{\Sigma}(\boldsymbol{\theta}) = \mathbf{R}$ , so that it simplifies:
+
+\begin{equation*}
+[\mathbf{I}(\boldsymbol{\theta})]_{l,l'} = K \, \Tr \left(
+\mathbf{R}^{-1} \frac{\partial \mathbf{R}}{\partial (\boldsymbol{\theta})_l} \mathbf{R}^{-1} \frac{\partial \mathbf{R}}{\partial (\boldsymbol{\theta})_{l'}}
+\right)
+\end{equation*}
+We need to compute $\mathbf{R}$ derivative for each  $l \in [\![1, \,P]\!]$ and $l' \in [\![1, \, P]\!]$. Let $l$ be in $[\![1 , \,P]\!]$ : 
+% A is N * P - Rs P * P 
+
+\begin{equation}  \label{eq:matRderiv}
+\frac{\partial \mathbf{R}}{\partial(\boldsymbol{\theta})_l} =  \frac{\partial \mathbf{A}(\boldsymbol{\theta}) \; \mathbf{R}_S \;\mathbf{A}(\boldsymbol{\theta})^\dagger + \sigma^2 \; \mathbf{I}}{\partial(\boldsymbol{\theta})_l}  = \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} \; \mathbf{R}_S \;\mathbf{A}(\boldsymbol{\theta})^\dagger + \mathbf{A}(\boldsymbol{\theta}) \; \mathbf{R}_S \; \frac{\partial \mathbf{A}(\boldsymbol{\theta})^\dagger}{\partial(\boldsymbol{\theta})_l}
+\end{equation}
+Now, let's decompose the matrix derivative of $\mathbf{A}(\boldsymbol{\theta}) \in  \mathcal{M}_{N,P}(\mathbb{R})$ for our $l$ index : 
+
+\begin{equation} \label{eq:matAderiv}
+\frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} = \left[\, \frac{\partial \mathbf{a}(\theta_1)}{\partial(\boldsymbol{\theta})_l},\,  \frac{\partial \mathbf{a}(\theta_2)}{\partial(\boldsymbol{\theta})_l}, \, \cdots, \,  \frac{\partial \mathbf{a}(\theta_P)}{\partial(\boldsymbol{\theta})_l} \right]
+\end{equation}
+Let $k$ be in $[\![1;P]\!]$. If $k \neq l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = 0$. If $k=l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = \frac{\partial \mathbf{a}(\theta_l)}{ \partial(\boldsymbol{\theta})_l}$. Now, let's decompose the derivative of $\mathbf{a}(\theta_l) \in \mathbb{R}^N$. With respect to $(\boldsymbol{\theta})_l$. From \autoref{eq:vectath} as it's a ULA network with $N$ antennas:
+
+\begin{equation*}
+\mathbf{a}(\theta_l) = \{\exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})}  \}_{n \in [\![1;N]\!]} = \begin{pmatrix} 1\\
+                     \vdots\\
+                     \exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+                     \vdots\\
+                     \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+            \end{pmatrix}
+\end{equation*}
+Meaning that the vectorial derivative of $\mathbf{a}(\theta_l)$ is: 
+
+\begin{equation*}
+\frac{\partial \mathbf{a}(\theta_l)}{\partial(\boldsymbol{\theta})_l}  = \frac{\partial }{\partial(\boldsymbol{\theta})_l} \begin{pmatrix} 1\\
+                     \vdots\\
+                     \exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+                     \vdots\\
+                     \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+            \end{pmatrix}
+    = \begin{pmatrix} 0 \\
+                     \vdots\\
+                      2\pi j (n-1)\frac{d}{\lambda} \cos (\theta_l) \exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+                     \vdots\\
+                      2\pi j (N-1)\frac{d}{\lambda} \cos (\theta_l) \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
+            \end{pmatrix}
+\end{equation*}
+Put that back in \autoref{eq:matAderiv}. We define $[\mathbf{DA}_l] \in  \mathcal{M}_{N,P}(\mathbb{R})$ such as: 
+
+\begin{equation*}
+[\mathbf{DA}_l] := \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} = \begin{pmatrix} 
+0 & \cdots &  0 &  \cdots & 0 \\
+\vdots& \vdots &\vdots&  \vdots & \vdots \\
+0 & \cdots &   2\pi j (n-1)\frac{d}{\lambda} \cos (\theta_l) \exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})} &  \cdots & 0 \\
+\vdots& \vdots &\vdots&  \vdots & \vdots \\
+0 & \cdots & \underset{column\; l}{\underbrace {2\pi j (N-1)\frac{d}{\lambda} \cos (\theta_l) \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta_l})}}}  &  \cdots & 0 \\
+\end{pmatrix}
+\end{equation*}
+
+Then once this is computed, we can express $[\mathbf{DR}_l] \in  \mathcal{M}_{N,P}(\mathbb{R})$ when substituting in \autoref{eq:matRderiv}:
+
+\begin{equation*}
+[\mathbf{DR}_l] :=
+    \mathbf{D}\mathbf{A}_l \, \mathbf{R}_S \, \mathbf{A}(\boldsymbol{\theta})^\dagger
+    +
+    \mathbf{A}(\boldsymbol{\theta}) \, \mathbf{R}_S \, \mathbf{D}\mathbf{A}_{l}^\dagger
+\end{equation*}
+With the same expression for $l'$ the derivative. We finally have $\forall l \in [\![1, \, P]\!] , \forall l' \in [\![1, \, P]\!]$: 
+
+\begin{equation*}
+[\mathbf{I}(\boldsymbol{\theta})]_{l,l'} = 
+    K \, \mathrm{Tr}\!\left( \mathbf{R}^{-1} \; [\mathbf{D}\mathbf{R}_{l}] \; \mathbf{R}^{-1} \;  [\mathbf{D}\mathbf{R}_{l'}]
+    \right) 
+\end{equation*}
+
+Let $\boldsymbol{\theta} = [\theta_1,\dots,\theta_P]^T$ be the parameter vector. The Fisher Information Matrix is computed element-wise as follows.
+
+For all $(l,l')\in [\![1,P]\!]^2$:
+\begin{itemize}
+    \item Compute the Jacobian matrices for A
+    \[
+    [\mathbf{D}\mathbf{A}_{l}] \;=\; \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial \theta_l},
+    \qquad
+    [\mathbf{D}\mathbf{A}_{l'}] \;=\; \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial \theta_{l'}} .
+    \]
+    \item Compute the Jacobian matrices for R
+    \[
+    [\mathbf{D}\mathbf{R}_{l}] \;=\; 
+    \mathbf{D}\mathbf{A}_l \, \mathbf{R}_S \, \mathbf{A}(\boldsymbol{\theta})^\dagger
+    +
+    \mathbf{A}(\boldsymbol{\theta}) \, \mathbf{R}_S \, \mathbf{D}\mathbf{A}_{l}^\dagger
+    \]
+    \[
+    [\mathbf{D}\mathbf{R}_{l'}] \;=\; 
+    [\mathbf{D}\mathbf{A}_{l'}] \, \mathbf{R}_S \, \mathbf{A}(\boldsymbol{\theta})^\dagger
+    +
+    \mathbf{A}(\boldsymbol{\theta}) \, \mathbf{R}_S \, [\mathbf{D}\mathbf{A}_{l'}] ^\dagger
+    \]
+    \item From the $(l,l')$ entry of the Fisher matrix:
+    \[
+    [\mathbf{I}(\boldsymbol{\theta})]_{l,l'}
+    =
+    K \, \mathrm{Tr}\!\left( \mathbf{R}^{-1} \; [\mathbf{D}\mathbf{R}_{l}]  \; \mathbf{R}^{-1} \;  [\mathbf{D}\mathbf{R}_{l'}]
+    \right)
+    \]
+\end{itemize}
+
+Once the Fisher Information Matrix $\mathbf{I}(\boldsymbol{\theta})$ is completed, the Cramér–Rao Bound is obtained from its inverse:
+\[
+CRB(\boldsymbol{\theta}) = \mathbf{I}(\boldsymbol{\theta})^{-1}
+\]
+
+\paragraph{Implementation\\}
+We implemented the Maximum Likelihood (ML) estimation approach for both cases: when the source 
+signals $s$ are known and when they are unknown. In the case where s is known, the CRB is identical
+ for all sources because the signals are assumed perfectly known and uncorrelated, so the only 
+ limiting factor is the additive noise. When $s$ is unknown, the CRB is significantly higher, 
+ particularly for closely spaced sources, reflecting
+ the increased difficulty in separating them due to the correlation between their steering vectors.\\
+
+The Monte Carlo simulations show that the ML estimator is sensitive to initialization and noise. 
+For known signals, the algorithm generally converges even with moderate random perturbations of 
+the initial angles, and the estimation error closely follows the CRB when convergence is achieved. 
+When both $s$ and $\sigma^2$ are unknown, convergence is much more difficult. Small deviations in 
+the initial guess can prevent convergence, and only very good initializations or low-noise 
+conditions allow the algorithm to reach the global minimum.\\
+
+Overall, knowing the source signals simplifies the DoA estimation problem and leads to much lower CRB and more robust convergence. When the signals are unknown, estimation is more challenging, especially for closely spaced sources, highlighting the practical need for careful initialization or the use of subspace-based methods to improve performance.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images//Graphics/MLE_graph.jpg}
+    \caption{MSE for MLE of the three sources}
+    \label{fig:placeholder}
+\end{figure}
+
+Although maximum likelihood estimators are statistically optimal, their practical implementation 
+is challenging due to the highly non-convex nature of the likelihood function. When the source 
+signals are unknown, the estimation problem becomes significantly more difficult, exhibiting strong 
+sensitivity to initialization and noise. In practice, ML is often used as a benchmark or combined 
+with subspace-based methods for improved robustness.
+
+\end{document}

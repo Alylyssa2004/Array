@@ -1,0 +1,249 @@
+\formatting
+
+
+\part{Niveau 0}
+
+\chapter{Images}
+
+\begin{figure}[h!]
+    \centering
+        \centering
+        \includegraphics[width=300 pt]{example-image-golden}
+    \centering
+    \caption[Caption sans cite pour ne pas casser les bib]{Caption avec cite pour avoir la ref sous l'image}
+    % NB1 - No \ac in the caption, would break the numbers in the List of ac
+    \label{fig:image_example}
+\end{figure}
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{example-image-golden}
+         \caption[subcaption 1]{Subcaption 1}
+         \label{fig:coarseSunsen}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.48\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{example-image-golden}
+         \caption[subcaption 2]{Subcaption 2}
+         \label{fig:fineSunSen}
+     \end{subfigure}
+    \caption{Global caption}
+    \label{fig:IntrSunSensors}
+\end{figure}
+
+\newpage
+
+% Functions not always
+\begin{wrapfigure}{l}{0.3\textwidth}
+    \includegraphics[width=0.3\textwidth]{example-image-golden}
+    \caption[Alphasat TDP6 Star Tracker @ESA]{Alphasat TDP6 Star Tracker @ESA}
+\label{fig:IntrstarSen}
+\end{wrapfigure}
+
+A star tracker or star sensor as shown in \autoref{fig:IntrstarSen} is a sensor which produces absolute attitude measurements. It identifies star patterns  and output the sensor's orientation compared to an inertial reference Although the identification of two stars is sufficient to determine the three-axis attitude , a pattern of four stars is preferred. This star pattern is then compared to an on board star catalog from which the attitude of the star sensor is calculated. A typical accuracy is \SI{0.025}{\degree} at $3\sigma$ at the . aaaaaaaaaaa aaaaaaaaa aaaaaaaaaaaaaaaaa aaaaa aaaaaaa aaaaaaaaaaaaaa aaaaaaa aaaaaaaaaaaaaa aaaaaaaaaaa aaaaaaaa
+
+\chapter{Text types}
+
+Code
+%Language Matlab also possible / C also 
+\begin{lstlisting}[language=Python]
+import numpy as np
+    
+def incmatrix(genl1,genl2):
+    m = len(genl1)
+    VT = np.zeros((n*m,1), int)
+    
+    return M
+\end{lstlisting}
+
+Indenté\\ % Sans espace = pas indenté
+\textbf{Gras}\\
+\textit{Italique}\\
+\textsl{Penché léger}\\
+\textsc{Small caps}\\
+Ref to bibliography \cite{Example_document}\\
+\textcolor{red}{Blabla in red} \\
+\textcolor{green}{Blabla in green}\\
+
+\tiny A
+\scriptsize 	A
+\footnotesize 	A
+\small 	A
+\normalsize 	A
+\large 	A
+\Large 	A
+\LARGE 	A
+\huge 	A
+
+
+
+\chapter{Maths}
+Espace de matrices : \(A \in \mathcal{M}_{m,n} (\mathbb{R})\)\\
+Espace d'entiers\\
+
+
+\[ (i, j) \in [\![1;m ]\!]^2 \]\\
+Fonction\\
+
+
+\( f: \mathbb{R}^n \rightarrow \mathbb{R} \) de classe ${C}^1$\\
+Equation matrices\\
+
+
+%Numbered eqn
+\begin{equation}\notag 
+X_{(r)} :=\begin{pmatrix} x_{1,1} & \ldots & x_{1,n}\\
+                    \vdots & \ddots & \vdots\\
+                    x_{m,1} & \ldots & x_{m,n}
+            \end{pmatrix} \quad
+            \begin{bmatrix} 2 \\ 3 \end{bmatrix} \quad
+            \begin{vmatrix} 2 \\ 3\end{vmatrix} \quad
+            \begin{Vmatrix} 2\\ 3 \end{Vmatrix} \quad
+            \begin{Bmatrix} 2\\ 3 \end{Bmatrix} \quad
+            \begin{Bmatrix} 2\\ 3 \end{Bmatrix} \quad
+            \begin{matrix} 2 \\ 3 \end{matrix} \quad
+\end{equation}
+
+\begin{equation}
+\left\langle \begin{matrix} 1 & 2 & 3\\ a & b & c \end{matrix}
+\right\rangle
+\end{equation}
+% Unnumbered eqn
+\begin{equation*}
+err = \| \mathbf{h} - \mathbf{h_{opt}} \| _2
+\end{equation*}
+
+Développement de Taylor \\
+Considérons maintenant une fonction  et fixons un $x \in \mathbb{R}^n$. On utilise un développement de Taylor à l’ordre $1$ de $f$ en $x$ dans la direction $\epsilon h$ où $h \in  \mathbb{R}^n$ et $\epsilon > 0$
+est un réel « petit ». On a alors : 
+
+\[f(x+\epsilon h) = f(x) + \epsilon \nabla^T f(x)h \]
+
+\[a \neq b \simeq c \]
+\begin{align} \notag
+expression &= calcul \\
+           &= suite du calcul \\
+           &= fin du calcul 
+\end{align}
+
+\begin{align*} \notag
+expression &= calcul \\
+           &= suite du calcul \\
+           &= fin du calcul 
+\end{align*}
+
+Action Lagrangienne \\
+\[ S : H \rightarrow \mathbb{R} \]
+\[ u \mapsto S(u) := \int{ \int_{\Omega}{L(u,\partial_x u,\partial_y u,x,y) \;dx}dy} \]
+
+Système d'équations -  \SI{5}{V} at \SI{25}{mA}.
+\begin{equation} \notag
+    (\mathcal{I}) \quad \left\{  
+    \begin{aligned}
+        & \Delta u = div g \quad \text{sur } \overset{\circ}{\Omega} \\
+        & u = f  \quad \text{sur } \partial \Omega\\
+        & \left.\frac{ \partial  \mathcal{L} ( \lambda ,\, \mathbf{w} )}{\partial \lambda} \right|_{\lambda = \widehat{\lambda} = 0 
+        &
+    \end{aligned}
+    \right.
+\end{equation}
+
+$$
+\begin{cases}
+t & \text{si } 0 \leq t \leq 1 \\
+2 - t & \text{si } 1 \leq t \leq 2 \\
+0 & \text{sinon}
+\end{cases}
+$$
+
+\chapter{Tables}
+
+\begin{table}[H] \centering
+% Caption on top
+\caption{Measurement Methods of Different Sensor Types\cite{Ley2011-yf}}
+    \begin{tabular}{|p{3cm}|p{4cm}|p{6cm}|}\hline \rowcolor{gray!20}
+    % First row
+    \textbf{Method}&\textbf{Example} & \textbf{Characteristics}\\ \hline
+    
+    Direct          & Star Sensor& \tabitem 3 Axis, High precision \\
+    & GNNS attitude measurement  & \tabitem 3 Axis, Mid precision \\ \hline
+    
+    Indirect        & Magnetometer & \tabitem Simple method \\
+                    & Earth sensor & \tabitem High reliability \\
+                    & Sun sensor   & \tabitem Transformations of measurement necessary \\ \hline
+                    
+    Inertial        & Gyroscope, Gyros & \tabitem Attitude alignment\\
+                    &                  & \tabitem High reliability for short periods \\
+                                     & & \tabitem Very high angular resolution \\
+                                     & & \tabitem Measurement independent of external sources \\ 
+    \hline \end{tabular}
+%%%%%%%
+\label{tab:Sensor_types}
+\end{table}
+
+
+\begin{table}[h]
+    \centering
+    \caption{Programmer pin for software uploading on the \ac{obc}}
+    \label{tab:prog_pin}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \rowcolor{gray!20} % Light gray color for the first row
+    \cellcolor{gray!40} Picoclasp pins & 1 & 2 & 3 & 4 & 5 \\ \hline
+    \cellcolor{gray!40} Programmer pins & RST & Tx & Rx & 5V & GND \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\chapter{Lists and enumerations}
+
+\begin{itemize}
+    \item aaa
+    \item[-] bbb
+    \item[--] ccc
+    \item[$-$] ddd
+    \item[$\sim$] eee
+    \item[*] fff
+    \item[!] A point to exclaim something!
+    \item[$\blacksquare$] Make the point fair and square.
+    \item[NOTE] This entry has no bullet
+    \item[] A blank label?
+\end{itemize}
+
+\begin{enumerate}
+    \item With the Github extension on \ac{vsc} : The tester shall clone the \underline{\hyperlink{https://github.com/VIBES-space/Vibes-ADCS/tree/main}{Github main branch}} mentioned in 
+    to their workspace.
+    \item[2. 3.] Without this extension : The software shall be downloaded as a zip file from the same \underline{\hyperlink{https://github.com/VIBES-space/Vibes-ADCS/tree/main}{Github main branch}} and then opened or in \ac{vsc} the extracted folder.
+\end{enumerate}
+
+\begin{description}
+   \item This is an entry \textit{without} a label.
+   \item[Something short] A short one-line description.
+   \item[Something long] A much longer description. \blindtext[1]
+\end{description}
+
+
+\chapter{1er niveau}
+
+\section{2e niveau}
+
+\subsection{3e niveau}
+
+\subsubsection{4e niveau}
+
+\paragraph{}
+5e niveau
+
+\subparagraph{}
+6e niveau
+
+Methodology : 
+From the guidelines, make titles as questions
+From the guidelines, estimate page length of the part 
+From the guidelines, divide in subparts with titles being questions as well
+
+Answer the questions
