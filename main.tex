@@ -45,17 +45,8 @@ In this report, we consider a network of $N$ ULA antennas that receives $P$ sour
 
 \section{Beamforming techniques}
 
-In this first section, the objective is to implement beamforming techniques by considering a specific scenario. For that, we consider that only one source, at each instant $k\in [\![1,\,K ]\!]$, $s(k)\in\mathbb{C}$ with power $P_S$ and direction, $\mathbf{a}(\theta_S)$ is received by the ULA and corrupted by an interference $i(k)\in\mathbb{C}$, with power $P_I$ and direction $\mathbf{a}_I(\theta_I)$. The signal received by the ULA can be expressed through the expression
-
-\begin{equation} \label{eq:sigdef}
-\mathbf{y}(k) =  \mathbf{a}(\theta_S) \; s(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
-\end{equation}
-with $\mathbf{y}(k),\, \in \mathbb{C}^N $
-
-\begin{equation} \label{eq:interfdef}
-s(k) \sim  \mathcal{N} (0,P_S) \qquad \mathbf{y}_I(k) = \mathbf{a}_I(\theta_I)\, i(k) \qquad i(k) \sim  \mathcal{N} (0,P_I)
-\end{equation}
-We consider a ULA, reception is done over $\theta \in [0,\,2 \pi]$ and the expression of a source direction for such a network is :
+In this first section, the objective is to implement beamforming techniques by considering a specific scenario. For that, we consider that only one source, at each instant $k\in [\![1,\,K ]\!]$, $s(k)\in\mathbb{R}$ with power $P_S$ and direction, $\mathbf{a}(\theta_S)$ is received by the ULA and corrupted by an interference $i(k)\in\mathbb{R}$, with power $P_I$ and direction $\mathbf{a}_I(\theta_I)$. \\
+We consider a ULA, reception is done over $\theta \in [0,\,2 \pi]$ and the expression of a source direction for such a network is for  $n \in [\![1,\,N]\!]$:
 
 \begin{equation} \label{eq:vectath}
 \mathbf{a}(\theta) = \begin{pmatrix} 1\\
@@ -64,6 +55,15 @@ We consider a ULA, reception is done over $\theta \in [0,\,2 \pi]$ and the expre
                      \vdots\\
                      \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta})} \\
             \end{pmatrix}
+\end{equation}
+The signal received by the ULA $\mathbf{y}(k) \in \mathbb{C}^N $ can be expressed through the expression
+
+\begin{equation} \label{eq:sigdef}
+\mathbf{y}(k) =  \mathbf{a}(\theta_S) \; s(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
+\end{equation}
+
+\begin{equation} \label{eq:interfdef}
+\qquad \text{with}\qquad  s(k) \sim  \mathcal{N} (0,P_S) \qquad \mathbf{y}_I(k) = \mathbf{a}_I(\theta_I)\, i(k) \qquad i(k) \sim  \mathcal{N} (0,P_I)
 \end{equation}
 The study is carried out by considering two cases depending on the knowledge of the interference-noise covariance matrix $\mathbf{C}$ and of the signal-interference-noise covariance matrix $\mathbf{R}$.
 
@@ -75,11 +75,14 @@ without any approximation.
 % -- Question 1 --
 \subsubsection{Covariance matrices R and C expression}
 By definition, we have the interference-noise covariance matrix $\mathbf{C}$ and the signal-interference-noise covariance matrix $\mathbf{R}$ :
-\begin{align*}
-    \mathbf{C} & = \sigma^2 \; \mathbf{I} + P_I \;  \mathbf{a}_I(\theta_I) \;  \mathbf{a}_I(\theta_I) ^\dagger =\mathbb{E} \left( \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)\\
-     \mathbf{R} & = \mathbf{C} + P_S \; \mathbf{a}(\theta_S)  \;  \mathbf{a}(\theta_S) ^\dagger   = \mathbb{E} \left( \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)
+\begin{align*} 
+    & \left\{  
+    \begin{aligned}
+        &\mathbf{C} = \sigma^2 \; \mathbf{I} + P_I \;  \mathbf{a}_I(\theta_I) \;  \mathbf{a}_I(\theta_I) ^\dagger =\mathbb{E} \left( \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)\\
+        &\mathbf{R}  = \mathbf{C} + P_S \; \mathbf{a}(\theta_S)  \;  \mathbf{a}(\theta_S) ^\dagger   = \mathbb{E} \left( \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right)
+    \end{aligned}
+    \right.
 \end{align*}
-
 First for $\mathbf{C}$ : 
 \begin{align} \notag
     \mathbf{C}  & = \mathbb{E} \left( \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger}\right) \\
@@ -87,26 +90,22 @@ First for $\mathbf{C}$ :
     & = \label{eq:Cmatdebut} \mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) + \mathbb{E} \left( \mathbf{y}_I(k)   \mathbf{n}(k) ^{\dagger} \right) + \mathbb{E} \left( \mathbf{n}(k) \mathbf{y}_I(k)  ^{\dagger} \right) + \mathbb{E} \left( \mathbf{n}(k)  \mathbf{n}(k) ^{\dagger} \right)
 \end{align}
 By assuming independence between the noise and the interference, the crossed terms are $0$ :
-
 \begin{equation*} 
     \mathbb{E} \left( \mathbf{y}_I(k)  \mathbf{n}(k) ^{\dagger} \right) = \mathbb{E} \left( \mathbf{n}(k) \mathbf{y}_I(k)  ^{\dagger} \right) = 0
 \end{equation*}
 We also know from \autoref{eq:sigdef} that :
-
 \begin{equation*} 
     \mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) = \mathbb{E} \biggl( \Bigl( \mathbf{a}_I(\theta_I) i(k) \Bigr) \Bigl( \mathbf{a}_I(\theta_I) i(k) \Bigr) ^{\dagger} \biggr) \qquad i(k) \sim  \mathcal{N} (0,P_I)
 \end{equation*}
-As $ \mathbf{a}_I(\theta_I)$ is not random and  $\mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \in \mathbb{R}$: 
-
+As $ \mathbf{a}_I(\theta_I)$ is not random and  $\mathbb{E} \bigl(  i(k) i(k)^{\top} \bigr) = P_I \in \mathbb{R}$: 
 \begin{align*} 
-\mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) & = \mathbf{a}_I(\theta_I) \mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I)\\
-& = \mathbb{E} \Bigl(  i(k) i(k)^{\dagger} \Bigr) \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I) \\
+\mathbb{E} \left(  \mathbf{y}_I(k) \mathbf{y}_I(k)  ^{\dagger} \right) & = \mathbf{a}_I(\theta_I) \mathbb{E} \Bigl(  i(k) i(k)^{\top} \Bigr) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I)\\
+& = \mathbb{E} \Bigl(  i(k) i(k)^{\top} \Bigr) \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger}  &\qquad i(k) \sim  \mathcal{N} (0,P_I) \\
 &   = P_I \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger}  
 \end{align*}
 From \autoref{eq:sigdef} directly with $\mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \mathbf{I})$: $ \notag
  \mathbb{E} \left( \mathbf{n}(k) \; \mathbf{n}(k) ^{\dagger}\right) = \sigma^2 \mathbf{I}
-$
-Replacing terms in \autoref{eq:Cmatdebut} : 
+$. Replacing terms in \autoref{eq:Cmatdebut} : 
 
 \begin{equation*}
   \mathbf{C} = \sigma^2 \mathbf{I} + P_I \; \mathbf{a}_I(\theta_I) \mathbf{a}_I(\theta_I)^{\dagger} 
@@ -116,27 +115,26 @@ Likewise for $\mathbf{R}$, we identify the same terms from $\mathbf{C}$ plus the
 \begin{equation*}
     \mathbf{R} = \mathbb{E} \left( \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right)   \left(  \mathbf{a}(\theta_S) \; s(k)  + \mathbf{y}_I(k) + \mathbf{n}(k) \right) ^{\dagger} \right)
 \end{equation*}
-
 \begin{multline*}
 \mathbf{R} =  \mathbf{C} + \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr) ^{\dagger} \Bigr) + 
-    \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \; \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr)^{\dagger}  \Bigr) + \\ \mathbb{E} \Bigl( \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr) \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)^{\dagger}  \Bigr) \\
+    \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \; \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr)^{\dagger}  \Bigr) + \\ \mathbb{E} \Bigl( \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr) \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)^{\dagger}  \Bigr)
 \end{multline*}
-By assuming independence between the noise and the signal and independence between the interference and the signal, crossed terms are $0$ and with $\mathbf{a}(\theta_S) $ not random and  $\mathbb{E} \Bigl( s(k) s(k)^{\dagger} \Bigr) \in \mathbb{R}$  : 
+By assuming independence between the noise and the signal and independence between the interference and the signal, crossed terms are $0$ and with $\mathbf{a}(\theta_S) $ not random and  $\mathbb{E} \bigl( s(k) s(k)^{\top} \bigr) = P_S \in \mathbb{R}$  : 
 \begin{align*} 
-  \mathbf{R} & =  \mathbf{C} + \mathbb{E} \bigl(  s(k) s(k)^{\dagger} \bigr) \, \mathbf{a}(\theta_S)\,\mathbf{a}(\theta_S)^{\dagger} \qquad s(k) \sim  \mathcal{N} (0,P_S)\\
+  \mathbf{R} & =  \mathbf{C} + \mathbb{E} \bigl(  s(k) s(k)^{\top} \bigr) \, \mathbf{a}(\theta_S)\,\mathbf{a}(\theta_S)^{\dagger} \qquad s(k) \sim  \mathcal{N} (0,P_S)\\
    &  =  \mathbf{C} + P_S\, \mathbf{a}(\theta_S)\,\mathbf{a}(\theta_S)^{\dagger}
 \end{align*}
 
 With these equations, we can implement the beamforming techniques. We can note that beamforming only depends on the antenna network geometry, including the positions of antennas, wavelength, and DoA, so we do not need to implement the received signal $\mathbf{y}(t)$ for these techniques.\\
 
 The goal of this part is to compare the different methods. We start by implementing the conventional beamforming $\mathbf{w}_{CBF}$ and verifying the relation between the Signal-Interference-Noise ratios (  $SINR_{out} = N \, SINR_{in}$). 
-Once it is done, we implement the optimal adaptive beamforming $\mathbf{w}_{opt}$ and its $SINR$. We obtain :
+Once it is done, we implement the optimal adaptive beamforming $\mathbf{w}_{opt}$ which uses the true covariance matrix $\mathbf{R}$ and its $SINR$. We obtain :
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\linewidth]{images//Graphics/AdaptiveBF.png}
+    \includegraphics[width=0.8\linewidth]{images//Graphics/AdaptiveBF.png}
     \caption{Adaptive Beamforming}
-    \label{fig:placeholder}
+    \label{fig:adaptbeamf}
 \end{figure}
 
 \break
@@ -146,39 +144,34 @@ Now, we assume that the angle $\theta_S$ is not very well-known and is provided 
 % -- Question 5 --
 \subsubsection{Signal-to-Interference and Noise Ratio (SINR) expression}
  
-We filter the signal at reception with the filter $\mathbf{w}$. Meaning the received signal is:
+We filter the signal at reception with a filter $\mathbf{w}$. Meaning the received signal is:
 
 \begin{equation*}
 \mathbf{y}_R(k) =  \mathbf{w} \; \mathbf{y}(k) = \underbrace{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) }_{signal \; of \; interest } \;  + \; \underbrace{ \mathbf{w}^\dagger \, \left(\mathbf{y}_I(k) + \mathbf{n}(k) \right) }_{interf. \; and  \; noise}  
 \end{equation*}
 The Signal to Interference and Noise Ratio (SINR) is, by definition, a ratio of the \textit{useful} power part (associated with the signal) over the  \textit{lost} part (associated with the noise and the interference). At reception, it can be expressed as : 
-
 \begin{align*} 
     SINR_{out} ( \mathbf{w})&= \frac{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \rvert^2 \bigr)}{ \mathbb{E} \bigl( \lvert \mathbf{w}^\dagger \, \left(\mathbf{y}_I(k) + \mathbf{n}(k) \right) \rvert^2 \bigr)} \\
     &= \frac{ \mathbb{E} \Bigl( \bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \bigr) \, \bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) \bigr)^\dagger \Bigr)}
     { \mathbb{E}  \Bigl( \bigl(  \mathbf{w}^\dagger \, \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \bigr) \bigl(  \mathbf{w}^\dagger \, \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \bigr)^\dagger \Bigr) } \\
-    & = \frac{ \mathbb{E} \Bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) s(k)^\dagger \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w} \Bigr)}
+    & = \frac{ \mathbb{E} \Bigl( \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, s(k) s(k)^\top \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w} \Bigr)}
     { \mathbb{E}  \Bigl(  \mathbf{w}^\dagger \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)^\dagger  \,  \mathbf{w} \Bigr) }
 \end{align*}
-As $\mathbf{w}$ and  $\mathbf{a}(\theta_S) $ not random, the expectation is $\in \mathbb{R}$ and from \autoref{eq:sigdef} and \autoref{eq:interfdef}
-
+As $\mathbf{w}$ and  $\mathbf{a}(\theta_S) $ not random, the expectation of $ s(k) s(k)^\top $ is $\in \mathbb{R}$. Then from \autoref{eq:sigdef} and \autoref{eq:interfdef}
 \begin{align*} 
-    SINR_{out} ( \mathbf{w})& = \frac{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \,   \mathbb{E} \Bigl( s(k) s(k)^\dagger \Bigr)  \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w}}
+    SINR_{out} ( \mathbf{w})& = \frac{\mathbf{w}^\dagger \, \mathbf{a}(\theta) \,   \mathbb{E} \Bigl( s(k) s(k)^\top \Bigr)  \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w}}
     { \mathbf{w}^\dagger \, \mathbb{E}  \Bigl(  \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right) \left( \mathbf{y}_I(k) + \mathbf{n}(k) \right)^\dagger \Bigr)  \,  \mathbf{w}  } \\
     & = \frac{  P_S  \, \mathbf{w}^\dagger \, \mathbf{a}(\theta) \, \mathbf{a}(\theta)^\dagger \,  \mathbf{w}}
     {  \mathbf{w}^\dagger \, \mathbf{C}  \,  \mathbf{w}  } = \frac{P_S \, \lvert \mathbf{w}^\dagger \, \mathbf{a}(\theta)  \rvert^2}
     { \mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}}
 \end{align*}
-From this expression, the maximization of the $SINR(\mathbf{w})$ is equivalent to the minimization of $\mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}$.
-
-% -- Question 6 --
-\subsubsection{Minimum Power Distortionless Response (MPDR) filter expression}
-
-We want to maximize $SINR(\mathbf{w})$. This is equivalent to solving the problem : 
-
+From this expression, considering moreover that we want to verify the unit constraint $\lvert \mathbf{w}^\dagger\mathbf{a}(\theta_S) \rvert = 1$, the maximization of the $SINR(\mathbf{w})$ is equivalent to the minimization of $\mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w}$.
 \begin{equation*} 
     \underset{\mathbf{w}}{\arg \max} \quad SINR(\mathbf{w}) = \underset{\mathbf{w}}{\arg \min}  \quad  \mathbf{w}^\dagger \,\mathbf{C} \, \mathbf{w} 
 \end{equation*}
+% -- Question 6 --
+\subsubsection{Minimum Power Distortionless Response (MPDR) filter expression}
+
 In practice, the matrix $\mathbf{C} $ is not available and cannot even be reliably estimated. Therefore, we must work with  $\mathbf{R}$, and our objective becomes to maximize the $SSINR$:
 
 \begin{equation*} 
@@ -190,9 +183,7 @@ The Minimum Power Distortionless Response filter $MPDR$ satisfies the following 
 \begin{equation} \label{eq:MPDRinit}
     \mathbf{w}_{MPDR} = \underset{\mathbf{w}}{\arg \min} \quad \mathbf{w}^\dagger \,\mathbf{R} \, \mathbf{w} 
 \end{equation}
-
-We consider, moreover, that we want to verify the unit constraint $\lvert \mathbf{w}^\dagger\mathbf{a}(\theta_S) \rvert = 1$. We end up with a constrained optimization problem,  which can be solve by using the Lagrangian of the problem. Let us define the Lagrangian with respect to $\mathbf{w} \in \mathbb{R}^N$ and $\lambda \in \mathbb{C}$ and its associated problem : 
-
+We must solve a constrained optimization problem, which can be done by using the Lagrangian of the problem. Let us define the Lagrangian $\mathcal{L} ( \lambda ,\, \mathbf{w} )$ with respect to $\mathbf{w} \in \mathbb{C}^N$ and $\lambda \in \mathbb{C}$ and its associated problem. We ar now searching for $\tilde{\mathbf{w}}$ and $\tilde{\lambda} $ such as: 
 \begin{align*} 
 \left\{ \tilde{\mathbf{w}}  ,\,\tilde{\lambda} \right\} &= \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathcal{L} ( \lambda ,\, \mathbf{w} ) =  \underset{\mathbf{w},\, \lambda}{\arg \min} \quad  \mathbf{w} ^\dagger \mathbf{R} \, \mathbf{w} + \lambda \left( \mathbf{w}^\dagger \mathbf{a} (\theta_S) - 1 \right) + \lambda^* \left( \mathbf{a} (\theta_S)^\dagger \mathbf{w} - 1 \right)
 \end{align*}
@@ -260,13 +251,13 @@ Lagrange conditions give us that the problem solutions are  $\left\{ \tilde{\mat
         & \left.\frac{ \partial  \mathcal{L} ( \lambda ,\, \mathbf{w} )}{\partial \mathbf{w}} \right|_{\lambda = \tilde{\lambda} , \, \mathbf{w} =  \tilde{\mathbf{w}}  }  = 0 \\
     \end{aligned}
     \right.\\
-    &\Leftrightarrow \left\{  
+    \Leftrightarrow &\left\{  
     \begin{aligned}
         &  \mathbf{R}  \, \tilde{\mathbf{w}} \, + \, \tilde{\lambda} ^*  \mathbf{a} (\theta_S) = 0 \\
         &   \tilde{\mathbf{w}} ^\dagger \mathbf{a} (\theta_S) - 1  = 0\\
     \end{aligned}
     \right.\\
-    &\Leftrightarrow \left\{  
+    \Leftrightarrow &\left\{  
     \begin{aligned}
         &   \tilde{\mathbf{w}} = - \tilde{\lambda}^* \,  \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)  \\
         & - \tilde{\lambda}^* = \frac{1}{\mathbf{a} (\theta_S)^\dagger \, \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)} \\
@@ -279,13 +270,13 @@ By substituting the second equation in the first one, we obtain the $MPDR$ filte
 \mathbf{w}_{MPDR} = \tilde{\mathbf{w}} =\frac{\mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}{\mathbf{a} (\theta_S)^\dagger \, \mathbf{R}^{-1} \, \mathbf{a} (\theta_S)}
 \end{equation*}
 \break
-Now that the expressions of the filters are computed, we can implement the two approaches by assuming the error between the true angle and the estimated angle is equal to $2^\circ$, and compare them to the Conventional and Adaptive beamforming :
+Now that the expressions of the filters are computed, we can implement the two approaches by assuming the error between the true angle and the estimated angle is equal to $2^\circ$ so $\widehat{\theta_s}=22^\circ$, and compare them to the Conventional and Adaptive beamforming :
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.5\linewidth]{images//Graphics/comparison_BF_PARTI.png}
+    \includegraphics[width=0.7\linewidth]{images//Graphics/comparison_BF_PARTI.png}
     \caption{Comparison of Beamforming Approaches}
-    \label{fig:placeholder}
+    \label{fig:compbf}
 \end{figure}
 
 We notice that around $\theta_s=20^\circ$ the four methods exhibit a strong peak, which corresponds to the direction of the desired signal. This peak represents the main beam of the array response and indicates that each beamforming successfully steers its gain toward the target source.  
@@ -321,7 +312,7 @@ We replace :
 p(\mathbf{n}(k)) & = \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \frac{1}{(\pi \, \sigma^2 )^{N/2}} \; \exp^{- \frac{1}{\sigma^2} (\lVert \mathbf{n_{re}}(k) \rVert^2 +  \lVert \mathbf{n}_{im}(k) \rVert^2)  }\\
 & = \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n_{re}}(k) \rVert^2  }  \times \frac{1}{(2\,\pi \, \frac{\sigma^2}{2} )^{N/2}} \; \exp^{- \frac{1}{ 2 \, \frac{\sigma^2}{2}} \lVert \mathbf{n}_{im}(k) \rVert^2  }
 \end{align*}
-By the real vectorial Gaussian for $\mathcal{N}(\mathbf{m}_0, \; \sigma_0^2 \, \mathbf{I})$ with the following distribution: 
+The real vectorial Gaussian for $\mathcal{N}(\mathbf{m}_0, \; \sigma_0^2 \, \mathbf{I})$ probability density has the following expression: 
 
 \begin{equation*}
 p(\mathbf{x})  = \frac{1}{(2\,\pi \, \sigma_0^2 )^{N/2}} \exp^{- \frac{1}{ 2 \, \sigma_0^2 } \lVert \mathbf{x} - \mathbf{m}_0\rVert^2  }
@@ -331,140 +322,163 @@ We arrive at the separation in a product of two real gaussians:
 \begin{equation*}
 p(\mathbf{n}(k))  = \mathbf{n_{re}}(k) \; \mathbf{n_{im}}(k) =  \mathcal{N}(0, \, \frac{\sigma^2}{2}\mathbf{I} )  \;\mathcal{N}(0, \, \frac{\sigma^2}{2} \mathbf{I}) 
 \end{equation*}
-
-\break
-
-We implement the received signal $y(k) \qquad \forall k \in [\![1,\, K]\!]$ :
+We implement the received signal $y(k) \quad \forall k \in [\![1,\, K]\!]$:
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\linewidth]{images//Graphics/sreceived_signal.png}
     \caption{Received signal}
-    \label{fig:placeholder}
+    \label{fig:rsig}
 \end{figure}
-
-This allows us to implement the new $MVDR$ and $MPDR$ filters with the matrices $R$ and $C$ unknown. By computing the errors, we obtain :
+This allows us to implement the new $MVDR$ and $MPDR$ filters with the matrices $R$ and $C$ unknown. By computing the errors, we obtain:
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\linewidth]{images//Graphics/errors_C_R_unknown.png}
     \caption{Comparison error of $MVDR$ and $MPDR$}
-    \label{fig:placeholder}
+    \label{fig:error_CR}
 \end{figure}
 
-We see that the errors of the new filters converged to the filter's values when $R$ and $C$ were known. Overall, the $MPDR$ filter has higher error and converges more slowly than the $MVDR$ filter. To compare them further, we calculate the $SINR$ of the two methods over $50$ Monte-Carlo realizations. For this, we consider $R$ and $C$ known. We obtain:
-
-\break
+We see that the errors of the new filters converged to the filter's values when $R$ and $C$ were known. Overall, the $MPDR$ filter has higher error and converges more slowly than the $MVDR$ filter. To compare them further, we calculate the $SINR$ of the two methods over $50$ Monte-Carlo realizations. For this, we consider $R$ and $C$ known. We obtain:\newpage
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\linewidth]{images//Graphics/SINR_mvdr_mpdr.png}
     \caption{Comparison SINR for MVDR and MPDR}
-    \label{fig:placeholder}
+    \label{fig:SINR_mvmp}
 \end{figure}
 
-The mean $SINR$ over the $50$ realizations for the two methods converge to the real values of $SINR$: as $K$ increases, noise in the sample covariance estimate decreases, so the estimated beamformer weights approach the optimal ones. $MVDR$ reaches a much higher $SINR$ than $MPDR$ and converges faster, confirming its superior interference suppression capability.
+The mean $SINR$ over the $50$ realizations for the two methods converge to the real values of $SINR$: as $K$ increases, noise in the sample covariance estimate decreases, so the estimated beamformer weights approach the optimal ones. $MVDR$ reaches a much higher $SINR$ than $MPDR$ and converges faster, confirming its superior interference suppression capability.\\
 
+This result is expected given the intrinsic structure of the covariance matrices $\mathbf{R}$ and $\mathbf{C}$. While $\mathbf{R}$ contains full signal, interference, and noise information, $\mathbf{C}$ only accounts for interference and noise, which naturally limits the performance of the corresponding beamformer. Although this leads to slower convergence and reduced performance, the $MPDR$ formulation is more realistic in practice, since the signal covariance is generally unknown and difficult to estimate.
 
 \subsubsection{Robust MPDR}
-We implement the Robust MPDR filter, which is a form of MPDR where a factor $\mu$ is added to $R$, for $\mu = [0, 1e^{-5}, 1e^{-4}, 1e^{-3}, 1e^{-2},1e^{-1}, 1]$.
+
+To address these limitations, we now introduce a robust $MPDR$ formulation, designed to mitigate the impact of model uncertainties and estimation errors while preserving the distortionless response constraint. This approach aims to improve stability and performance in realistic operating conditions.\\
+
+We implement the Robust MPDR filter, a variant of the MPDR where a diagonal loading factor $\mu$ is added to the estimated covariance matrix $\widehat{\mathbf{R}}$, with values $\mu = [0, 10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}, 1]$. \\
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images//Graphics/Robust_MPDR2.png}
+    \caption{Comparison MVDR, MPDR, and Robust MPDR with $\theta_S$ known}
+    \label{fig:thknownRMPDR}
+\end{figure}
+
+When the source direction $\theta_S$ is accurately known, this method is particularly effective: as the parameter $\mu$ increases, the performance approaches the $MPDR$ SINR, demonstrating near-optimal behavior. \\
+
+We also consider the more realistic scenario where the direction is estimated with some error ($\widehat{\theta_S}$ assumed to have a $2^\circ$ deviation) to assess the method's robustness under imperfect knowledge.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{images//Graphics/Robust_MPDR.png}
-    \caption{Comparison MVDR, MPDR, and Robust MPDR}
-    \label{fig:placeholder}
+    \caption{Comparison MVDR, MPDR, and Robust MPDR with $\theta_S$ estimated}
+    \label{fig:thestiRMPDR}
 \end{figure}
-When we examine the standard deviation along the diagonal of $R$, we find values around $0.0089$ on average across all Monte Carlo runs. 
-Then, if we introduce the $\mu$ factor and set it too large (around 1), its contribution becomes dominant—around $11{,}000\,\%$. 
-In this case, all diagonal terms become nearly identical, which degrades performance since the algorithm can no longer distinguish differences in the covariance values.\\
 
-Conversely, if $\mu$ is too small (around $10^{-5}$), its contribution represents only about $0.11\,\%$. Its effect is therefore negligible, and no improvement is observed in the beamformer’s performance.\\
+Here we observe that for $\mu = 0$, the performance corresponds to the classical $MPDR$ filter, as expected. As $\mu$ increases, the performance improves: the filter achieves better SINR even with a small number of snapshots $K$ and converges faster. However, when $\mu$ is set too high, the SINR can temporarily exceed the ideal $MPDR$ value, but this comes at the cost of stability, leading to increased fluctuations and degraded performance for larger $K$.\\
 
-With more moderate values of $\mu$ (e.g., $10^{-3}$ in this case), the contribution is around $11\,\%$. 
-It increases the overall diagonal, improves matrix conditioning and stability during inversion, while still preserving enough variation to distinguish between entries.  We also note that for $\mu = 0$, the SINR of the robust MPDR collapses to the classic MPDR value, and 
-if $\mu$ is too large, the SINR drops. \\
+To assess the relevance of different $\mu$ values, we compared the absolute $\mu$ to the average power of the covariance matrix:
+\[
+\text{Relative percentage} = \frac{\mu}{\mathrm{tr}(\widehat{\mathbf{R}})/N} \times 100.
+\]
 
-Therefore, to improve MPDR performance, $\mu$ values between $10^{-4}$ and $10^{-2}$ are recommended. 
+This quantifies the strength of the regularization relative to the mean received power across the array. If $\mu$ is set too large ($1e{-1}$ or $1$), its contribution dominates with a relative percentage higher than $30 \%$, making all diagonal terms nearly identical. This degrades performance since the algorithm can no longer distinguish differences in the covariance values. \\
+
+Conversely, if $\mu$ is too small ($1e^{-3}$, $1e^{-4}$ and $0$), its effect is negligible with a relative percentage lower than $1 \%$, and low (or no) improvement is observed in the beamformer's performance.\\
+
+The goal is to choose a moderate $\mu$ that balances these effects, contributing between a few $\%$ and $20\%$ relative to the mean power. This increases the overall diagonal, improves matrix conditioning and stability during inversion, while still preserving enough variation to distinguish between entries. Therefore, to improve MPDR performance, $\mu$ values between $1e^{-3}$ and $1e{-2}$ are recommended. 
 Overall, this method helps accelerate convergence and improve the accuracy of the MPDR algorithm.
 
-\break
-
+\newpage
 \section{Implementation of DoA estimation techniques}
 
-In this section, we will implement the various DoA estimation techniques. To achieve this, we assume a new scenario where the ULA network receives three unknown sources with directions \( \boldsymbol{\theta}_S = [\theta_1, \, \theta_2, \, \theta_3 ]^\top\). The simulation parameters remain unchanged. The primary modification is that we now consider $P = 3$ sources with $\theta_1$ = $-25^\circ$, $\theta_2$ = $20^\circ$, $\theta_3$ = $25^\circ$, and $\mathbf{P}_S = 10$. As previously, the matrices $ \mathbf{C}$ and $ \mathbf{R}$ are estimated and $K$ is fixed to $500$. Additionally, we assume the presence of interference. Consequently, the signal is modeled by:
+Having studied beamforming techniques and their performance in interference suppression, we now turn to direction-of-arrival (DoA) estimation methods. These approaches are complementary: while beamformers rely on knowledge of the source directions to optimize signal reception, DoA estimation allows us to accurately determine those directions in practice. This is particularly important because, as we have seen, the performance of some beamforming filters is highly sensitive to angle errors, highlighting the need for precise DoA estimation to achieve reliable beamformer operation.In the previous section, the focus was on improving SINR by filtering the received signal at a fixed $\theta$. Our goal now shifts to accurately estimating the source direction $\theta_S$.\\
+
+In this section, we will implement the various DoA estimation techniques. The primary modification is that we now consider $P = 3$ sources and $\mathbf{P}_S = 10$. To achieve this, we assume a new scenario where the ULA network receives three unknown sources with directions \( \boldsymbol{\theta}_S = [\theta_1$ = $-25^\circ$, $\theta_2$ = $20^\circ$, $\theta_3$ = $25^\circ]^\top\). The other simulation parameters remain unchanged. As previously, the matrices $ \mathbf{C}$ and $ \mathbf{R}$ are estimated and $K$ is fixed to $500$. Additionally, we assume the presence of interference. Consequently, the signal is modeled by:
+
 \begin{equation} \label{eq:sigdefpart2}
-\mathbf{y}(k) =  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
+\mathbf{y}(k) =  \mathbf{A}(\boldsymbol{\theta}_S) \; \mathbf{s}(k) + \mathbf{y}_I(k) + \mathbf{n}(k) \qquad \mathbf{n}(k) \sim  \mathcal{CN} (0,\sigma^2 \; \mathbf{I} )
 \end{equation}
-with $\mathbf{A}(\boldsymbol{\theta}_S) = [\mathbf{a}(\theta_1) ,\,\mathbf{a}(\theta_2) , \, \mathbf{a}(\theta_3) ]$ and for each $k$ $\mathbf{s}(k) \in \mathbb{C}^3$. 
+with $\mathbf{y}(k) \in \mathbb{C}^N$, the steering matrix $\mathbf{A}(\boldsymbol{\theta}_S) = [\mathbf{a}(\theta_1) ,\,\mathbf{a}(\theta_2) , \, \mathbf{a}(\theta_3) ] \in \mathcal{M}_{N,P}(\mathbb{C})$ and $\forall k \in [\![1,\,K]\!]$ $\mathbf{s}(k) \in \mathbb{C}^3$. \\
+
+
+DoA estimation methods can be classified into parametric approaches and non-parametric approaches.
 
 \subsection{Implementation of non-parametric approaches}
 
 % -- Question 1 -- 
 % \paragraph{Question 1 - Define "non-parametric"}
+Non-parametric methods do not assume a specific model for the source signals: they work directly with the output power received after beamforming. We start by implementing the two methods based on the conventional $\mathbf{w}_{CBF}$ and adaptive beamforming with Capon's method $\widehat{\mathbf{w}}_{MPDR}$, with interferences. \\
 
-Non-parametric methods do not assume a specific model for the source signals: they work directly with the output power received after beamforming.
-We start by implementing the two methods based on the conventional $\mathbf{w}_{CBF}$ and adaptive beamforming with Capon's method $\hat{\mathbf{w}}_{MPDR}$, with interferences. We obtain:
-
+Although the DoA estimation methods are not performing the same task as beamforming, they are based on the same underlying equations demonstrated in the previous beamforming section. In both the conventional (Bartlett) and Capon (MVDR) approaches, the steering vectors and covariance matrices introduced for beamforming are used to evaluate the spatial power distribution as a function of angle. To estimate the directions of arrival, we compute the power spectrum for all candidate angles $\theta \in [0,\, 2 \pi]$:
+\[
+P_{Conv.}(\theta) = \mathbf{a}(\theta)^\dagger \widehat{\mathbf{R}} \mathbf{a}(\theta) \qquad \text{and} \qquad 
+P_{Capon}(\theta) =  \dfrac{1}{\mathbf{a}(\theta)^\dagger \widehat{\mathbf{R}}^{-1} \mathbf{a}(\theta)} 
+\]
+and then identify the peaks of $P(\theta)$. These peaks indicate the estimated source directions $\hat{\theta}_S$, achieving the goal of accurate DoA estimation using the same structures introduced for beamforming. We obtain:
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.48\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images//Graphics/Conventional_Capon_21.png}
-         \caption[subcaption 1]{For $\theta_3=21°$}
-         \label{fig:coarseSunsen}
+         \caption{For $\theta_3=21°$}
+         \label{fig:theta21}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.48\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images//Graphics/Conventional_Capon.png}
-         \caption[subcaption 2]{For $\theta_3=25°$}
-         \label{fig:fineSunSen}
+         \caption{For $\theta_3=25°$}
+         \label{fig:theta25}
      \end{subfigure}
-    \caption{Conventional and Capon comparison}
-    \label{fig:IntrSunSensors}
+    \caption{Conventional and Capon power spectrum comparison}
+    \label{fig:cbf_capon_comp}
 \end{figure}
-We can see that both methods show spectral peaks at the true angles of arrival, indicated by the dashed vertical lines. However, the Capon exhibits much sharper and narrower peaks than the conventional method. This means $MVDR$ is more effective at separating closely spaced sources. The conventional beamformer has large side lobes while the $MVDR$ suppresses them, dropping more than $40$ dB below the main peaks. The $MVDR$ spectrum includes deep nulls at the positions of interferers, unlike the conventional method. This is a signature of adaptive beamforming: $MVDR$ actively cancels interference while preserving the desired signal.When the third source is $\theta_3=21$°, we see that the second and third DoA are not accurately separated. The methods are not precise enough.
+We can see that both methods show spectral peaks at the true angles of arrival, indicated by the dashed vertical lines. However, the Capon spectrum exhibits much sharper and narrower peaks than the conventional method. This means it is more effective at separating closely spaced sources.\\
+
+The conventional beamformer has large side lobes while the $MVDR$ suppresses them, dropping more than $40$ dB below the main peaks. The $MVDR$ spectrum includes deep nulls at the positions of interferers, unlike the conventional method. This is a signature of adaptive beamforming: $MVDR$ actively cancels interference while preserving the desired signal.When the third source is $\theta_3=21$°, we see that the second and third DoA are not accurately separated. The methods are not precise enough.
 
 \subsection{Implementation of parametric approaches}
+
+Parametric approaches model the signal as a sum of a finite number of sources and exploit this structure.
 
 \subsubsection{MUSIC method}
 
 % -- Question 4 --
 %\paragraph{Question 4 - why is MUSIC parametric}
-
-In the MUSIC method, we assume the structure of the signal covariance matrix $\mathbf{R}  = \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger + \sigma^2 \, \mathbf{I} $. This is considered prior information, so that this method can be considered parametric.
+In the MUSIC method, we assume a structured form for the signal covariance matrix,
+\[
+\mathbf{R} = \mathbf{A}(\theta) \mathbf{R}_S \mathbf{A}(\theta)^\dagger + \sigma^2 \mathbf{I}.
+\] 
+Although this does not model the signal samples directly, it incorporates prior knowledge about the signal subspace, which is why MUSIC is considered a parametric DoA estimation method.
 
 % -- Question 5 --
 \paragraph{Power expression with the MUSIC approach\\}
 
-We first assume: $\mathbf{R}  = \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger + \sigma^2 \, \mathbf{I} $
+Both the conventional and Capon methods compute the spatial power directly from the beamformer output. We now aim to improve upon this by exploiting the classical decomposition of the received signal into signal and interference-plus-noise components. This approach provides a more accurate estimate of the source power and is widely applicable across different communication scenarios.\\
 
-We decompose $\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger$ into an orthonormal basis of eigenvectors \( \{{\mathbf{u}_i}\}_{i\,\in\,[\![1;N ]\!]} \). $\mathbf{U}$ composed of all $\mathbf{u}_i$ , then gives the following equation : 
-
+We decompose $\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger$ into an orthonormal basis of eigenvectors \( \{{\mathbf{u}_i}\}_{i\,\in\,[\![1;N ]\!]} \). $\mathbf{U}$ composed of all $\mathbf{u}_i$ to take advantages of the orthonormal properties by keeping the information contained in the covariance matrix, then gives the following equation : 
 \begin{equation*}
 \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger = \mathbf{U} \, \Lambda  \, \mathbf{U}^\dagger
 \end{equation*}
 where $\Lambda$ is the diagonal matrix of the eigenvalues $\lambda_i$  associated with the eigenvectors $\mathbf{u}_i$. The matrix $\mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger$ is of rank $P$, which means that (in descending order) the $P$ first eigenvalues are non-zero, and the $N-P$ others are null. By separating $\mathbf{U}$ into two separate parts  $\mathbf{U}_S = [\mathbf{u}_1, \cdots,\mathbf{u}_P] $ and  $\mathbf{U}_N = [\mathbf{u}_{P+1}, \cdots,\mathbf{u}_N] $, we have :
-
 \begin{equation*} \label{eq:generatrice} \mathbf{A}(\theta) \mathbf{R}_S  \mathbf{A}(\theta)^\dagger = \sum_{p=1}^{P} \lambda_p \, \mathbf{u}_p \mathbf{u}_p^\dagger = \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger 
 \end{equation*}
 And then, the orthogonality of the matrix $U_N$ (from the SVD definition) yields to :
-
 \begin{equation} \label{eq:Rform}
 \mathbf{R} =  \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger + \sigma^2  \mathbf{U}_N \, \mathbf{U}_N^\dagger
 \end{equation}
 To compute the estimated power, \autoref{eq:generatrice} gives us that both $\mathbf{a}(\theta_S)$ and $\mathbf{U}_S$ generate the same space, meaning they are different bases of the same space. Then, as we know $\mathbf{U}_S \perp \mathbf{U}_N $, we obtain  $\mathbf{a}(\theta_S) \perp \mathbf{U}_N$. We also have $\mathbf{a}(\theta_S)^\dagger \cdot \mathbf{U}_N = 0$.
-Numerically, a power is the sum of the energies of the studied signal. Here, in the considered subspace, it can be written as $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
-
+The power of a signal is the sum of the energies of the studied signal. Here, in the considered subspace, it can be written as $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
 \begin{equation*}
 P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \mathbf{U}_S \mathbf{U}_S^\dagger \; \mathbf{a}(\theta_S)}
 \end{equation*}
 From our assumptions, we determine $\widehat{\mathbf{U}}_S$ from $\mathbf{R}$. In reality, we do not have access to $\mathbf{R}$ so we have to estimate it from a distribution. Meaning $\mathbf{R}$ becomes $\widehat{\mathbf{R}}$ and $\mathbf{U}_S$ becomes $\widehat{\mathbf{U}}_S$:
-
 \begin{equation*}
 P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \widehat{\mathbf{U}}_S \widehat{\mathbf{U}}_S^\dagger \; \mathbf{a}(\theta_S)}
 \end{equation*}
+\newpage
 We implement this method with interferences. We set $\theta$ between $[-100^\circ, +100^\circ]$.
 
 \begin{figure}[h!]
@@ -473,10 +487,29 @@ We implement this method with interferences. We set $\theta$ between $[-100^\cir
     \caption{Comparison Music and Capon}
     \label{fig:placeholder}
 \end{figure}
+$MUSIC$ shows very sharp, narrow peaks aligned with the true DoAs. This is expected because $MUSIC$ exploits the orthogonality between the noise subspace and the array steering vectors. As a result, $MUSIC$ can separate closely spaced sources even when conventional or $MVDR$ beamforming struggles. On the other hand, $MVDR$ also shows peaks at the correct DoAs, but the peaks are wider, less pronounced, and sometimes slightly shifted depending on estimation noise. Overall, $MUSIC$ exhibits stronger discrimination capability.\\
 
-$MUSIC$ shows very sharp, narrow peaks aligned with the true DoAs. This is expected because $MUSIC$ exploits the orthogonality between the noise subspace and the array steering vectors. As a result, $MUSIC$ can separate closely spaced sources even when conventional or $MVDR$ beamforming struggles. On the other hand, $MVDR$ also shows peaks at the correct DoAs, but the peaks are wider, less pronounced, and sometimes slightly shifted depending on estimation noise. So, overall, $MUSIC$ exhibits a stronger discrimination capability.\\
+When interferences are added, $MVDR$ suppresses the response near the interference DoA, effectively placing a null while maintaining gain toward the desired direction. $MUSIC$, however, does not actively null interferences, highlighting that it is primarily a detection or estimation technique, whereas $MVDR$ also functions as a beamforming or filtering method.\\
 
-We added interferences, and $MVDR$ shows a suppressed response near the interference DoA, because it tries to place a null while maintaining gain toward the desired direction, but MUSIC does not. Which leads us to say that MUSIC is a detection or estimation technique, while $MVDR$ is also more of a beamforming or filtering technique.
+In practical scenarios, the number of sources is not always known in advance. To address this, we implemented model-order selection criteria such as the Akaike Information Criterion (AIC) and the Minimum Description Length (MDL), which estimate the number of sources based on the eigenstructure of the covariance matrix. A peak-finding function was also used to rank the estimated DoAs from highest to lowest power. \autoref{tab:summar} summarizes the estimated DoAs for the different methods under both known and MDL-estimated numbers of sources. The last column indicates the interference detected when the number of sources is estimated using MDL. Since the true signal sources generally have higher power than the interference, the peak-finding algorithm ranks the interference last when ordering the detected directions in descending power.
+\begin{table}[h!]
+\centering
+\caption{Estimated DoAs for different methods and cases}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{gray!60}\cellcolor{gray!00} & \multicolumn{4}{c|}{$\theta_3=25$} & \multicolumn{4}{c|}{$\theta_3=21$} \\ \hline
+\rowcolor{gray!30} Method  & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_i$ & $\theta_1$ & $\theta_2$ & $\theta_3$ &  $\theta_i$  \\
+\hline
+\cellcolor{gray!30}  True DoA        & $-25$ & $20$ & $25$ & $30$ & $-25$ & $20$ & $21$ & $30$ \\ \hline
+\cellcolor{gray!30}  Conventional DoA& $-25$ & $8$  & $22$ &$-11$ & $-25$ & $7$  & $21$ & $35$ \\ \hline
+\cellcolor{gray!30}  Capon DoA       & $-25$ & $20$ & $25$ & $50$ & $-25$ & $-10$& $21$& $30$ \\ \hline
+\cellcolor{gray!30}  MUSIC DoA       & $-25$ & $20$ & $25$ & $30$ & $-25$ & $2$  & $21$ & $30$ \\ \hline
+\end{tabular}
+\label{tab:summar}
+\end{table}
+
+From the table, we observe that when the sources are sufficiently separated, Capon's and MUSIC DoA methods are able to detect the main true sources ($[-25,20,25]$) reasonably well. Only the conventional method has already too large lobes so that it cannot distinguish $20$ and $25$. 
+However, only $MUSIC$ detects the interference (peak at $30^\circ$) when the number of sources is estimated using MDL, while conventional and Capon methods miss it. When some sources are closer together ($[-25,21,25]$), the three performs similarly and we notice that  $\theta_2$ and $\theta_3$ cannot be separated. Overall, $MUSIC$ exhibits the strongest ability to detect both main and weaker or additional signals.
 
 \subsubsection{Maximum Likelihood method}
 
@@ -662,12 +695,12 @@ We need to compute $\mathbf{R}$ derivative for each  $l \in [\![1, \,P]\!]$ and 
 \begin{equation}  \label{eq:matRderiv}
 \frac{\partial \mathbf{R}}{\partial(\boldsymbol{\theta})_l} =  \frac{\partial \mathbf{A}(\boldsymbol{\theta}) \; \mathbf{R}_S \;\mathbf{A}(\boldsymbol{\theta})^\dagger + \sigma^2 \; \mathbf{I}}{\partial(\boldsymbol{\theta})_l}  = \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} \; \mathbf{R}_S \;\mathbf{A}(\boldsymbol{\theta})^\dagger + \mathbf{A}(\boldsymbol{\theta}) \; \mathbf{R}_S \; \frac{\partial \mathbf{A}(\boldsymbol{\theta})^\dagger}{\partial(\boldsymbol{\theta})_l}
 \end{equation}
-Now, let's decompose the matrix derivative of $\mathbf{A}(\boldsymbol{\theta}) \in  \mathcal{M}_{N,P}(\mathbb{R})$ for our $l$ index : 
+Now, let's decompose the matrix derivative of $\mathbf{A}(\boldsymbol{\theta}) \in  \mathcal{M}_{N,P}(\mathbb{C})$ for our $l$ index : 
 
 \begin{equation} \label{eq:matAderiv}
 \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} = \left[\, \frac{\partial \mathbf{a}(\theta_1)}{\partial(\boldsymbol{\theta})_l},\,  \frac{\partial \mathbf{a}(\theta_2)}{\partial(\boldsymbol{\theta})_l}, \, \cdots, \,  \frac{\partial \mathbf{a}(\theta_P)}{\partial(\boldsymbol{\theta})_l} \right]
 \end{equation}
-Let $k$ be in $[\![1;P]\!]$. If $k \neq l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = 0$ and if $k=l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = \frac{\partial \mathbf{a}(\theta_l)}{ \partial(\boldsymbol{\theta})_l}$. Now, let's decompose the derivative of $\mathbf{a}(\theta_l) \in \mathbb{R}^N$, with respect to $(\boldsymbol{\theta})_l$. From \autoref{eq:vectath} as it's a ULA network with $N$ antennas:
+Let $k$ be in $[\![1;P]\!]$. If $k \neq l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = 0$ and if $k=l$, $\frac{\partial \mathbf{a}(\theta_k)}{\partial(\boldsymbol{\theta})_l} = \frac{\partial \mathbf{a}(\theta_l)}{ \partial(\boldsymbol{\theta})_l}$. Now, let's decompose the derivative of $\mathbf{a}(\theta_l) \in \mathbb{C}^N$, with respect to $(\boldsymbol{\theta})_l$. From \autoref{eq:vectath} as it's a ULA network with $N$ antennas:
 
 \begin{equation*}
 \mathbf{a}(\theta_l) = \{\exp^{-2\pi j (n-1) \frac{d}{\lambda} \sin ({\theta_l})}  \}_{n \in [\![1;N]\!]} = \begin{pmatrix} 1\\
@@ -693,7 +726,7 @@ Meaning that the vectorial derivative of $\mathbf{a}(\theta_l)$ is:
                       2\pi j (N-1)\frac{d}{\lambda} \cos (\theta_l) \exp^{-2\pi j (N-1) \frac{d}{\lambda} \sin ({\theta_l})} \\
             \end{pmatrix}
 \end{equation*}
-Put that back in \autoref{eq:matAderiv}. We define $[\mathbf{DA}_l] \in  \mathcal{M}_{N,P}(\mathbb{R})$ such as: 
+Put that back in \autoref{eq:matAderiv}. We define $[\mathbf{DA}_l] \in  \mathcal{M}_{N,P}(\mathbb{C})$ such as: 
 
 \begin{equation*}
 [\mathbf{DA}_l] := \frac{\partial \mathbf{A}(\boldsymbol{\theta})}{\partial(\boldsymbol{\theta})_l} = \begin{pmatrix} 
@@ -705,7 +738,7 @@ Put that back in \autoref{eq:matAderiv}. We define $[\mathbf{DA}_l] \in  \mathca
 \end{pmatrix}
 \end{equation*}
 
-Then once this is computed, we can express $[\mathbf{DR}_l] \in  \mathcal{M}_{N,P}(\mathbb{R})$ when substituting in \autoref{eq:matRderiv}:
+Then once this is computed, we can express $[\mathbf{DR}_l] \in  \mathcal{M}_{N,P}(\mathbb{C})$ when substituting in \autoref{eq:matRderiv}:
 
 \begin{equation*}
 [\mathbf{DR}_l] :=
@@ -755,38 +788,47 @@ For all $(l,l')\in [\![1,P]\!]^2$:
 
 Once the Fisher Information Matrix $\mathbf{I}(\boldsymbol{\theta})$ is completed, the Cramér–Rao Bound is obtained from its inverse:
 \[
-CRB(\boldsymbol{\theta}) = \mathbf{I}(\boldsymbol{\theta})^{-1}
+CRB(\boldsymbol{\theta}) = \Tr \bigl( \mathbf{I}(\boldsymbol{\theta})^{-1}\bigr)
 \]
+\paragraph{Implementation and Comparison\\}
+We implemented the Maximum Likelihood (ML) DoA estimator for two scenarios: when the source signals are \emph{deterministic} (known) and when they are \emph{stochastic} (unknown). For deterministic signals, the Cramér-Rao Bound (CRB) is identical across sources, as the only limiting factor is additive noise. For stochastic signals, the CRB is higher, especially for closely spaced sources, reflecting the increased difficulty in separating correlated steering vectors.\\
+\break
 
-\paragraph{Implementation\\}
-We implemented the Maximum Likelihood (ML) estimation approach for both cases: when the source 
-signals $s$ are known and when they are unknown. In the case where $s$ is known, the $CRB$ is identical
-for all sources because the signals are assumed perfectly known and uncorrelated, so the only 
-limiting factor is the additive noise. When $s$ is unknown, the $CRB$ is significantly higher, 
-particularly for closely spaced sources, reflecting
-the increased difficulty in separating them due to the correlation between their steering vectors.\\
-
-The Monte-Carlo simulations show that the ML estimator is sensitive to initialization and noise. 
-For known signals, the algorithm generally converges even with moderate random perturbations of 
-the initial angles, and the estimation error closely follows the $CRB$ when convergence is achieved. 
-When both $s$ and $\sigma^2$ are unknown, convergence is much more difficult. Small deviations in 
-the initial guess can prevent convergence, and only very good initializations or low-noise 
-conditions allow the algorithm to reach the global minimum.\\
-
-Overall, knowing the source signals simplifies the DoA estimation problem and leads to much lower $CRB$ and more robust convergence. When the signals are unknown, the estimation is more challenging, especially for closely spaced sources, highlighting the practical need for careful initialization or the use of subspace-based methods to improve performance.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=0.9\linewidth]{images//Graphics/MLE_graph.jpg}
-    \caption{MSE for MLE of the three sources}
-    \label{fig:placeholder}
+    \includegraphics[width=0.6\linewidth]{images/Graphics/MLE1.png}
+    \caption{MSE for ML estimation of three sources in the deterministic case}
+    \label{fig:MLE1}
 \end{figure}
 
-Although maximum likelihood estimators are statistically optimal, their practical implementation 
-is challenging due to the highly non-convex nature of the likelihood function. When the source 
-signals are unknown, the estimation problem becomes significantly more difficult, exhibiting strong 
-sensitivity to initialization and noise. In practice, ML is often used as a benchmark or combined 
-with subspace-based methods for improved robustness.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\linewidth]{images/Graphics/MLE2.png}
+    \caption{MSE for ML estimation of three sources in the stochastic case}
+    \label{fig:MLE2}
+\end{figure}
 
+Monte Carlo simulations confirm that ML is highly sensitive to initialization and noise. For deterministic signals, convergence is generally achieved even with moderate deviations from the true angles, and estimation errors closely follow the CRB. For stochastic signals, convergence is more challenging: small errors in the initial guess can prevent the algorithm from reaching the global minimum, and only accurate initializations or low-noise conditions yield correct estimates.\\
+
+To improve convergence, we use MUSIC to provide initial DoA estimates and compare ML behavior with three initialization strategies: far from the true DoAs, close to the true DoAs, and MUSIC-based estimates.  
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/Graphics/comparison_mle.png}
+    \caption{ML estimates with different initializations compared to true source directions}
+    \label{fig:MLE3}
+\end{figure}
+
+The results show that:  
+\begin{itemize}
+    \item For closely spaced sources, ML often fails to converge when initialized far from the true angles. Small initialization errors lead to large estimation errors.  
+    \item MUSIC-based initialization consistently yields accurate ML estimates, closely matching the true DoAs.  
+    \item For well-separated sources, ML is more robust, though MUSIC still provides the most reliable starting point.  
+\end{itemize}
+
+This demonstrates the practical value of combining subspace methods like MUSIC with ML estimation: MUSIC provides good initial guesses that improve ML robustness and accuracy, especially in challenging scenarios with closely spaced sources. While MUSIC alone is effective for most cases, ML can refine estimates when high angular precision is required. However, when the signals are stochastic, ML without good initialization or prior knowledge cannot reliably separate closely spaced sources.
+
+\section*{Conclusion}
 
 
 \end{document}

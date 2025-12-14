@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.7)  12 DEC 2025 15:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.7)  14 DEC 2025 16:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -828,50 +828,7 @@ Package bm Info: No bold for \U/msa/m/n, using \pmb.
 Package bm Info: No bold for \U/msb/m/n, using \pmb.
 \symboldstmry=\mathgroup10
 LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 149.
-) (./main.aux
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder' multiply defined.
-
-
-LaTeX Warning: Label `fig:placeholder@cref' multiply defined.
-
-)
+) (./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
@@ -1000,172 +957,249 @@ LaTeX Font Warning: Font shape `U/stmry/b/n' undefined
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.101 \begin{align*}
-                     [1]
-Underfull \hbox (badness 10000) in paragraph at lines 130--131
+l.105 \end{align*}
+                   [1]
+Underfull \hbox (badness 10000) in paragraph at lines 128--129
 
  []
 
-<images//Graphics/AdaptiveBF.png, id=96, 509.65407pt x 398.23781pt>
+<images//Graphics/AdaptiveBF.png, id=96, 936.6192pt x 443.7378pt>
 File: images//Graphics/AdaptiveBF.png Graphic file (type png)
 <use images//Graphics/AdaptiveBF.png>
-Package pdftex.def Info: images//Graphics/AdaptiveBF.png  used on input line 137.
-(pdftex.def)             Requested size: 256.07481pt x 200.10281pt.
+Package pdftex.def Info: images//Graphics/AdaptiveBF.png  used on input line 135.
+(pdftex.def)             Requested size: 409.72125pt x 194.11449pt.
+
+
+[2 <./images//Graphics/AdaptiveBF.png (PNG copy)>]
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 271--274
+
+ []
+
+<images//Graphics/comparison_BF_PARTI.png, id=112, 936.6192pt x 441.8106pt>
+File: images//Graphics/comparison_BF_PARTI.png Graphic file (type png)
+<use images//Graphics/comparison_BF_PARTI.png>
+Package pdftex.def Info: images//Graphics/comparison_BF_PARTI.png  used on input line 277.
+(pdftex.def)             Requested size: 358.50317pt x 169.10997pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-
-[2]
-
-[3 <./images//Graphics/AdaptiveBF.png>]
-
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 280--283
-
- []
-
-<images//Graphics/comparison_BF_PARTI.png, id=119, 502.12593pt x 394.47375pt>
-File: images//Graphics/comparison_BF_PARTI.png Graphic file (type png)
-<use images//Graphics/comparison_BF_PARTI.png>
-Package pdftex.def Info: images//Graphics/comparison_BF_PARTI.png  used on input line 286.
-(pdftex.def)             Requested size: 256.07481pt x 201.18497pt.
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 292.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 283.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 292.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 283.
 
 Missing character: There is no ° in font cmr10!
 
 
-[5 <./images//Graphics/comparison_BF_PARTI.png>]
+[4]
 
-[6]
-<images//Graphics/sreceived_signal.png, id=135, 532.23843pt x 392.21532pt>
+[5 <./images//Graphics/comparison_BF_PARTI.png (PNG copy)>]
+<images//Graphics/sreceived_signal.png, id=128, 532.23843pt x 392.21532pt>
 File: images//Graphics/sreceived_signal.png Graphic file (type png)
 <use images//Graphics/sreceived_signal.png>
-Package pdftex.def Info: images//Graphics/sreceived_signal.png  used on input line 341.
+Package pdftex.def Info: images//Graphics/sreceived_signal.png  used on input line 329.
 (pdftex.def)             Requested size: 256.07481pt x 188.71007pt.
-<images//Graphics/errors_C_R_unknown.png, id=136, 548.0475pt x 410.2828pt>
+<images//Graphics/errors_C_R_unknown.png, id=129, 548.0475pt x 410.2828pt>
 File: images//Graphics/errors_C_R_unknown.png Graphic file (type png)
 <use images//Graphics/errors_C_R_unknown.png>
-Package pdftex.def Info: images//Graphics/errors_C_R_unknown.png  used on input line 350.
+Package pdftex.def Info: images//Graphics/errors_C_R_unknown.png  used on input line 337.
 (pdftex.def)             Requested size: 256.07481pt x 191.70607pt.
 
 
-[7 <./images//Graphics/sreceived_signal.png> <./images//Graphics/errors_C_R_unknown.png>]
-<images//Graphics/SINR_mvdr_mpdr.png, id=145, 526.96875pt x 395.22656pt>
+[6 <./images//Graphics/sreceived_signal.png> <./images//Graphics/errors_C_R_unknown.png>]
+<images//Graphics/SINR_mvdr_mpdr.png, id=139, 526.96875pt x 395.22656pt>
 File: images//Graphics/SINR_mvdr_mpdr.png Graphic file (type png)
 <use images//Graphics/SINR_mvdr_mpdr.png>
-Package pdftex.def Info: images//Graphics/SINR_mvdr_mpdr.png  used on input line 361.
+Package pdftex.def Info: images//Graphics/SINR_mvdr_mpdr.png  used on input line 346.
 (pdftex.def)             Requested size: 256.07481pt x 192.06458pt.
-<images//Graphics/Robust_MPDR.png, id=146, 1445.4pt x 697.10437pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 351--352
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 357--358
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 359--360
+
+ []
+
+<images//Graphics/Robust_MPDR2.png, id=140, 939.51pt x 454.3374pt>
+File: images//Graphics/Robust_MPDR2.png Graphic file (type png)
+<use images//Graphics/Robust_MPDR2.png>
+Package pdftex.def Info: images//Graphics/Robust_MPDR2.png  used on input line 363.
+(pdftex.def)             Requested size: 460.93153pt x 222.89764pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 368--369
+
+ []
+
+
+
+[7 <./images//Graphics/SINR_mvdr_mpdr.png> <./images//Graphics/Robust_MPDR2.png (PNG copy)>]
+<images//Graphics/Robust_MPDR.png, id=148, 936.1374pt x 454.3374pt>
 File: images//Graphics/Robust_MPDR.png Graphic file (type png)
 <use images//Graphics/Robust_MPDR.png>
 Package pdftex.def Info: images//Graphics/Robust_MPDR.png  used on input line 374.
-(pdftex.def)             Requested size: 512.14963pt x 247.00043pt.
+(pdftex.def)             Requested size: 512.14963pt x 248.56221pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--381
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 382--383
+Underfull \hbox (badness 10000) in paragraph at lines 379--380
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 384--387
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 388--389
 
  []
 
 
 
-[8 <./images//Graphics/SINR_mvdr_mpdr.png> <./images//Graphics/Robust_MPDR.png (PNG copy)>]
+[8 <./images//Graphics/Robust_MPDR.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 396--397
 
-[9]
-<images//Graphics/Conventional_Capon_21.png, id=158, 487.06969pt x 389.20406pt>
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 402--404
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 412--413
+
+ []
+
+<images//Graphics/Conventional_Capon_21.png, id=154, 504.4446pt x 358.941pt>
 File: images//Graphics/Conventional_Capon_21.png Graphic file (type png)
 <use images//Graphics/Conventional_Capon_21.png>
-Package pdftex.def Info: images//Graphics/Conventional_Capon_21.png  used on input line 413.
-(pdftex.def)             Requested size: 245.82962pt x 196.43663pt.
+Package pdftex.def Info: images//Graphics/Conventional_Capon_21.png  used on input line 424.
+(pdftex.def)             Requested size: 245.82962pt x 174.91867pt.
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 425.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 414.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 414.
-
-Missing character: There is no ° in font cmr10!
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 414.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 414.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 425.
 
 Missing character: There is no ° in font cmr10!
-<images//Graphics/Conventional_Capon.png, id=159, 403.5075pt x 320.69812pt>
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 425.
+
+
+LaTeX Warning: Command \textdegree invalid in math mode on input line 425.
+
+Missing character: There is no ° in font cmr10!
+<images//Graphics/Conventional_Capon.png, id=155, 504.4446pt x 358.941pt>
 File: images//Graphics/Conventional_Capon.png Graphic file (type png)
 <use images//Graphics/Conventional_Capon.png>
-Package pdftex.def Info: images//Graphics/Conventional_Capon.png  used on input line 420.
-(pdftex.def)             Requested size: 245.82962pt x 195.38089pt.
+Package pdftex.def Info: images//Graphics/Conventional_Capon.png  used on input line 431.
+(pdftex.def)             Requested size: 245.82962pt x 174.91867pt.
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 421.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 421.
-
-Missing character: There is no ° in font cmr10!
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 421.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 432.
 
 
-LaTeX Warning: Command \textdegree invalid in math mode on input line 421.
+LaTeX Warning: Command \textdegree invalid in math mode on input line 432.
 
 Missing character: There is no ° in font cmr10!
 
+LaTeX Warning: Command \textdegree invalid in math mode on input line 432.
 
-[10{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc} <./images//Graphics/Conventional_Capon_21.png> <./images//Graphics/Conventional_Capon.png>]
-<images//Graphics/Music_Capon.png, id=172, 414.04688pt x 325.96782pt>
-File: images//Graphics/Music_Capon.png Graphic file (type png)
-<use images//Graphics/Music_Capon.png>
-Package pdftex.def Info: images//Graphics/Music_Capon.png  used on input line 472.
-(pdftex.def)             Requested size: 256.07481pt x 201.60553pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
+LaTeX Warning: Command \textdegree invalid in math mode on input line 432.
+
+Missing character: There is no ° in font cmr10!
+
+Underfull \hbox (badness 10000) in paragraph at lines 438--439
 
  []
 
 
 
-[11 <./images//Graphics/Music_Capon.png>]
+[9 <./images//Graphics/Conventional_Capon_21.png (PNG copy)> <./images//Graphics/Conventional_Capon.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 459--460
+
+ []
+
+
+
+[10{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+<images//Graphics/Music_Capon.png, id=171, 496.7358pt x 358.941pt>
+File: images//Graphics/Music_Capon.png Graphic file (type png)
+<use images//Graphics/Music_Capon.png>
+Package pdftex.def Info: images//Graphics/Music_Capon.png  used on input line 486.
+(pdftex.def)             Requested size: 256.07481pt x 185.04015pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 490--491
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 492--493
+
+ []
+
+
+
+[11 <./images//Graphics/Music_Capon.png (PNG copy)>]
 
 [12]
 
 [13]
 
 [14]
-Underfull \hbox (badness 10000) in paragraph at lines 762--768
+Underfull \hbox (badness 10000) in paragraph at lines 794--796
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 769--775
+Underfull \hbox (badness 10000) in paragraph at lines 794--796
+
+ []
+
+<images/Graphics/MLE1.png, id=207, 939.51pt x 444.7014pt>
+File: images/Graphics/MLE1.png Graphic file (type png)
+<use images/Graphics/MLE1.png>
+Package pdftex.def Info: images/Graphics/MLE1.png  used on input line 799.
+(pdftex.def)             Requested size: 307.2929pt x 145.44908pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<images/Graphics/MLE2.png, id=208, 939.51pt x 444.7014pt>
+File: images/Graphics/MLE2.png Graphic file (type png)
+<use images/Graphics/MLE2.png>
+Package pdftex.def Info: images/Graphics/MLE2.png  used on input line 806.
+(pdftex.def)             Requested size: 307.2929pt x 145.44908pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 811--812
 
  []
 
 
 
 [15]
-<images//Graphics/MLE_graph.jpg, id=212, 964.8045pt x 461.92575pt>
-File: images//Graphics/MLE_graph.jpg Graphic file (type jpg)
-<use images//Graphics/MLE_graph.jpg>
-Package pdftex.def Info: images//Graphics/MLE_graph.jpg  used on input line 779.
-(pdftex.def)             Requested size: 460.93153pt x 220.68571pt.
+<images/Graphics/comparison_mle.png, id=213, 943.8462pt x 442.2924pt>
+File: images/Graphics/comparison_mle.png Graphic file (type png)
+<use images/Graphics/comparison_mle.png>
+Package pdftex.def Info: images/Graphics/comparison_mle.png  used on input line 817.
+(pdftex.def)             Requested size: 460.93153pt x 215.98955pt.
 
 
-[16 <./images//Graphics/MLE_graph.jpg>] (./main.aux)
+[16 <./images/Graphics/MLE1.png (PNG copy)> <./images/Graphics/MLE2.png (PNG copy)> <./images/Graphics/comparison_mle.png (PNG copy)>]
+
+[17] (./main.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
@@ -1174,25 +1208,22 @@ L3 programming layer <2025-09-02>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 3C6E63C0967A609BFD4314731C98861C;3123.
  ) 
 Here is how much of TeX's memory you used:
- 36362 strings out of 467748
- 725966 string characters out of 5431138
- 1268247 words of memory out of 5000000
- 64434 multiletter control sequences out of 15000+600000
+ 36419 strings out of 467748
+ 727279 string characters out of 5431138
+ 1267247 words of memory out of 5000000
+ 64486 multiletter control sequences out of 15000+600000
  652008 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,19n,121p,844b,1159s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,19n,121p,906b,1182s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb>
-Output written on main.pdf (17 pages, 1387724 bytes).
+Output written on main.pdf (18 pages, 2012085 bytes).
 PDF statistics:
- 352 PDF objects out of 1000 (max. 8388607)
- 253 compressed objects within 3 object streams
- 53 named destinations out of 1000 (max. 500000)
- 172 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 360 PDF objects out of 1000 (max. 8388607)
+ 262 compressed objects within 3 object streams
+ 58 named destinations out of 1000 (max. 500000)
+ 187 words of extra memory for PDF output out of 10000 (max. 10000000)
 
