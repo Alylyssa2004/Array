@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.7)  14 DEC 2025 16:04
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.10.7)  15 DEC 2025 02:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1133,18 +1133,18 @@ Underfull \hbox (badness 10000) in paragraph at lines 459--460
 
 
 [10{c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-<images//Graphics/Music_Capon.png, id=171, 496.7358pt x 358.941pt>
+<images//Graphics/Music_Capon.png, id=172, 496.7358pt x 358.941pt>
 File: images//Graphics/Music_Capon.png Graphic file (type png)
 <use images//Graphics/Music_Capon.png>
-Package pdftex.def Info: images//Graphics/Music_Capon.png  used on input line 486.
+Package pdftex.def Info: images//Graphics/Music_Capon.png  used on input line 488.
 (pdftex.def)             Requested size: 256.07481pt x 185.04015pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 490--491
+Underfull \hbox (badness 10000) in paragraph at lines 492--493
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
+Underfull \hbox (badness 10000) in paragraph at lines 494--495
 
  []
 
@@ -1157,49 +1157,69 @@ Underfull \hbox (badness 10000) in paragraph at lines 492--493
 [13]
 
 [14]
-Underfull \hbox (badness 10000) in paragraph at lines 794--796
 
- []
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 794--796
-
- []
-
-<images/Graphics/MLE1.png, id=207, 939.51pt x 444.7014pt>
+<images/Graphics/MLE1.png, id=211, 939.51pt x 444.7014pt>
 File: images/Graphics/MLE1.png Graphic file (type png)
 <use images/Graphics/MLE1.png>
-Package pdftex.def Info: images/Graphics/MLE1.png  used on input line 799.
+Package pdftex.def Info: images/Graphics/MLE1.png  used on input line 822.
 (pdftex.def)             Requested size: 307.2929pt x 145.44908pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-<images/Graphics/MLE2.png, id=208, 939.51pt x 444.7014pt>
-File: images/Graphics/MLE2.png Graphic file (type png)
-<use images/Graphics/MLE2.png>
-Package pdftex.def Info: images/Graphics/MLE2.png  used on input line 806.
-(pdftex.def)             Requested size: 307.2929pt x 145.44908pt.
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 811--812
-
- []
-
 
 
 [15]
-<images/Graphics/comparison_mle.png, id=213, 943.8462pt x 442.2924pt>
-File: images/Graphics/comparison_mle.png Graphic file (type png)
-<use images/Graphics/comparison_mle.png>
-Package pdftex.def Info: images/Graphics/comparison_mle.png  used on input line 817.
-(pdftex.def)             Requested size: 460.93153pt x 215.98955pt.
+<images/Graphics/MLE2.png, id=216, 939.51pt x 444.7014pt>
+File: images/Graphics/MLE2.png Graphic file (type png)
+<use images/Graphics/MLE2.png>
+Package pdftex.def Info: images/Graphics/MLE2.png  used on input line 831.
+(pdftex.def)             Requested size: 307.2929pt x 145.44908pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 836--837
+
+ []
 
 
-[16 <./images/Graphics/MLE1.png (PNG copy)> <./images/Graphics/MLE2.png (PNG copy)> <./images/Graphics/comparison_mle.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 838--839
 
-[17] (./main.aux)
+ []
+
+
+
+[16 <./images/Graphics/MLE1.png (PNG copy)> <./images/Graphics/MLE2.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 844--845
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 846--847
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 848--849
+
+ []
+
+<images/Graphics/Final_comp.png, id=225, 937.5828pt x 332.442pt>
+File: images/Graphics/Final_comp.png Graphic file (type png)
+<use images/Graphics/Final_comp.png>
+Package pdftex.def Info: images/Graphics/Final_comp.png  used on input line 871.
+(pdftex.def)             Requested size: 460.93153pt x 163.4357pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 876--877
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 880--881
+
+ []
+
+
+
+[17 <./images/Graphics/Final_comp.png (PNG copy)>]
+
+[18] (./main.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
@@ -1212,18 +1232,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 3C6E63C0967A609BFD4314731C98861C;3123.
  ) 
 Here is how much of TeX's memory you used:
- 36419 strings out of 467748
- 727279 string characters out of 5431138
- 1267247 words of memory out of 5000000
- 64486 multiletter control sequences out of 15000+600000
+ 36427 strings out of 467748
+ 727365 string characters out of 5431138
+ 1270246 words of memory out of 5000000
+ 64491 multiletter control sequences out of 15000+600000
  652008 words of font info for 106 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 117i,19n,121p,906b,1182s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb>
-Output written on main.pdf (18 pages, 2012085 bytes).
+ 117i,19n,121p,906b,1159s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfcc1728.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfti1095.pfb>
+Output written on main.pdf (19 pages, 2033514 bytes).
 PDF statistics:
- 360 PDF objects out of 1000 (max. 8388607)
- 262 compressed objects within 3 object streams
- 58 named destinations out of 1000 (max. 500000)
+ 377 PDF objects out of 1000 (max. 8388607)
+ 276 compressed objects within 3 object streams
+ 61 named destinations out of 1000 (max. 500000)
  187 words of extra memory for PDF output out of 10000 (max. 10000000)
 

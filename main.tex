@@ -117,7 +117,7 @@ Likewise for $\mathbf{R}$, we identify the same terms from $\mathbf{C}$ plus the
 \end{equation*}
 \begin{multline*}
 \mathbf{R} =  \mathbf{C} + \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr) ^{\dagger} \Bigr) + 
-    \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \; \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr)^{\dagger}  \Bigr) + \\ \mathbb{E} \Bigl( \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr) \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)^{\dagger}  \Bigr)
+    \mathbb{E} \Bigl( \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)  \; \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr)^{\dagger}  \Bigr) + \\\ \mathbb{E} \Bigl( \bigl( \mathbf{y}_I(k) + \mathbf{n}(k) \bigr) \, \bigl( \mathbf{a}(\theta_S) \; s(k) \bigr)^{\dagger}  \Bigr)
 \end{multline*}
 By assuming independence between the noise and the signal and independence between the interference and the signal, crossed terms are $0$ and with $\mathbf{a}(\theta_S) $ not random and  $\mathbb{E} \bigl( s(k) s(k)^{\top} \bigr) = P_S \in \mathbb{R}$  : 
 \begin{align*} 
@@ -469,16 +469,18 @@ And then, the orthogonality of the matrix $U_N$ (from the SVD definition) yields
 \begin{equation} \label{eq:Rform}
 \mathbf{R} =  \mathbf{U}_S \, \Lambda_S  \, \mathbf{U}_S^\dagger + \sigma^2  \mathbf{U}_N \, \mathbf{U}_N^\dagger
 \end{equation}
-To compute the estimated power, \autoref{eq:generatrice} gives us that both $\mathbf{a}(\theta_S)$ and $\mathbf{U}_S$ generate the same space, meaning they are different bases of the same space. Then, as we know $\mathbf{U}_S \perp \mathbf{U}_N $, we obtain  $\mathbf{a}(\theta_S) \perp \mathbf{U}_N$. We also have $\mathbf{a}(\theta_S)^\dagger \cdot \mathbf{U}_N = 0$.
-The power of a signal is the sum of the energies of the studied signal. Here, in the considered subspace, it can be written as $ \mathbf{a}(\theta_S)^\dagger \, \mathbf{U}_N \, \mathbf{U}_N  \, \mathbf{a}(\theta_S)^\dagger$. We want : 
+To compute the estimated power, we exploit the structure of the covariance matrix. From \autoref{eq:generatrice}, the steering vectors $\mathbf{a}(\theta_S)$ span the signal subspace, which is also spanned by the eigenvectors associated with the $P$ largest eigenvalues of $\mathbf{R}$, gathered in $\mathbf{U}_S$. Consequently, the noise subspace $\mathbf{U}_N$ is orthogonal to the signal subspace, and we have
+\[
+\mathbf{U}_N^\dagger \mathbf{a}(\theta_S) = \mathbf{0}.
+\]
+The MUSIC method is based on this orthogonality property. For an arbitrary scanning angle $\theta$, the quantity $\mathbf{a}(\theta)^\dagger \mathbf{U}_N \mathbf{U}_N^\dagger \mathbf{a}(\theta)$ measures the projection of the steering vector onto the noise subspace and vanishes when $\theta$ corresponds to a true direction of arrival. The MUSIC pseudospectrum is therefore defined as:
 \begin{equation*}
-P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \mathbf{U}_S \mathbf{U}_S^\dagger \; \mathbf{a}(\theta_S)}
+P_{\text{MUSIC}}(\theta) = \frac{1}{\mathbf{a}(\theta)^\dagger \; \mathbf{U}_N \mathbf{U}_N^\dagger \; \mathbf{a}(\theta)}.
 \end{equation*}
-From our assumptions, we determine $\widehat{\mathbf{U}}_S$ from $\mathbf{R}$. In reality, we do not have access to $\mathbf{R}$ so we have to estimate it from a distribution. Meaning $\mathbf{R}$ becomes $\widehat{\mathbf{R}}$ and $\mathbf{U}_S$ becomes $\widehat{\mathbf{U}}_S$:
+In practice, $\mathbf{R}$ is unknown and is replaced by its estimate $\widehat{\mathbf{R}}$, leading to the estimated noise subspace $\widehat{\mathbf{U}}_N$ and the practical MUSIC spectrum:
 \begin{equation*}
-P_{MUSIC}(\theta) = \frac{1}{\mathbf{a}(\theta_S)^\dagger \; \widehat{\mathbf{U}}_S \widehat{\mathbf{U}}_S^\dagger \; \mathbf{a}(\theta_S)}
+P_{\text{MUSIC}}(\theta) = \frac{1}{\mathbf{a}(\theta)^\dagger \; \widehat{\mathbf{U}}_N \widehat{\mathbf{U}}_N^\dagger \; \mathbf{a}(\theta)}.
 \end{equation*}
-\newpage
 We implement this method with interferences. We set $\theta$ between $[-100^\circ, +100^\circ]$.
 
 \begin{figure}[h!]
@@ -501,9 +503,9 @@ In practical scenarios, the number of sources is not always known in advance. To
 \rowcolor{gray!30} Method  & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_i$ & $\theta_1$ & $\theta_2$ & $\theta_3$ &  $\theta_i$  \\
 \hline
 \cellcolor{gray!30}  True DoA        & $-25$ & $20$ & $25$ & $30$ & $-25$ & $20$ & $21$ & $30$ \\ \hline
-\cellcolor{gray!30}  Conventional DoA& $-25$ & $8$  & $22$ &$-11$ & $-25$ & $7$  & $21$ & $35$ \\ \hline
-\cellcolor{gray!30}  Capon DoA       & $-25$ & $20$ & $25$ & $50$ & $-25$ & $-10$& $21$& $30$ \\ \hline
-\cellcolor{gray!30}  MUSIC DoA       & $-25$ & $20$ & $25$ & $30$ & $-25$ & $2$  & $21$ & $30$ \\ \hline
+\cellcolor{gray!30}  Conventional DoA& $-25$ & $22$ & & &$-25$ & $20$ &&  \\ \hline
+\cellcolor{gray!30}  Capon DoA       & $-25$ & $20$ & $25$ &  & $-25$ & $20$& & $30$ \\ \hline
+\cellcolor{gray!30}  MUSIC DoA       & $-25$ & $20$ & $25$ & $30$ & $-25$ & $20$ & & $30$ \\ \hline
 \end{tabular}
 \label{tab:summar}
 \end{table}
@@ -521,7 +523,7 @@ likelihood so that:
 Particularly, we propose to study the deterministic likelihood approach, which assumes that $s(k)$ is not random.
 
 % -- Question 8 --
-\paragraph{1. When $s$ and $\sigma^2$ are known}
+\paragraph{1. Deteministic case - When $s$ and $\sigma^2$ are known}
 
 \subparagraph{Theorical estimator expression\\}
 
@@ -599,7 +601,7 @@ so that the Fisher Information Matrix entries become:
 \mathbf{s}(k)
 \right).
 \end{equation*}
-Finally, the Cramér–Rao bound for this case is given by:
+Finally, the Cramér-Rao bound for this case is given by:
 
 \begin{equation*}
 \mathrm{CRB}(\boldsymbol{\theta}_S)
@@ -607,7 +609,7 @@ Finally, the Cramér–Rao bound for this case is given by:
 \mathbf{I}(\boldsymbol{\theta}_S)^{-1}.
 \end{equation*}
 
-\paragraph{2. When $s$ and $\sigma^2$ are unknown}
+\paragraph{2. Stochastic case - When $s$ and $\sigma^2$ are unknown}
 
 \subparagraph{Theorical estimator expression\\}
 
@@ -621,7 +623,7 @@ With $\boldsymbol{\Sigma} = \sigma^2 \; \mathbf{I}$, we have $\lvert \boldsymbol
 \begin{equation} \label{eq:thml2base}
 \widehat{\boldsymbol{\theta}}_{S,\, ML2} = \underset{\boldsymbol{\theta}_S, \, \sigma^2, \, \mathbf{s}(k)}{\arg \min}\quad KN \ln \bigl( \sigma^2 \bigr) + \frac{1}{\sigma^2} \sum_{k=1}^{K} \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2
 \end{equation}
-First, we minimize with respect to $\mathbf{s}(k)$ is a classical linear least–squares problem, so it can be expressed easily: 
+First, we minimize with respect to $\mathbf{s}(k)$ is a classical linear least-squares problem, so it can be expressed easily: 
 
 \begin{align*}
 \widehat{ \mathbf{s} }(k) & = \underset{\mathbf{s}(k)}{\arg \min} \quad \lVert  \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k)\rVert^2 = \underset{\mathbf{s}(k)}{\arg \min} \quad \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)^\dagger \left( \mathbf{y}(k) - \mathbf{A}(\boldsymbol{\theta}_S) \mathbf{s}(k) \right)
@@ -786,49 +788,97 @@ For all $(l,l')\in [\![1,P]\!]^2$:
     \]
 \end{itemize}
 
-Once the Fisher Information Matrix $\mathbf{I}(\boldsymbol{\theta})$ is completed, the Cramér–Rao Bound is obtained from its inverse:
+Once the Fisher Information Matrix $\mathbf{I}(\boldsymbol{\theta})$ is completed, the Cramér-Rao Bound is obtained from its inverse:
 \[
 CRB(\boldsymbol{\theta}) = \Tr \bigl( \mathbf{I}(\boldsymbol{\theta})^{-1}\bigr)
 \]
-\paragraph{Implementation and Comparison\\}
-We implemented the Maximum Likelihood (ML) DoA estimator for two scenarios: when the source signals are \emph{deterministic} (known) and when they are \emph{stochastic} (unknown). For deterministic signals, the Cramér-Rao Bound (CRB) is identical across sources, as the only limiting factor is additive noise. For stochastic signals, the CRB is higher, especially for closely spaced sources, reflecting the increased difficulty in separating correlated steering vectors.\\
-\break
+
+\paragraph{Implementation of the method and its CRB\\}
+
+We implemented the Maximum Likelihood (ML) DoA estimator for two scenarios: when the source 
+signals are \emph{deterministic} (known) and when they are \emph{stochastic} (unknown).
+We first tested the convergence of this iterative algorithm under several initialization conditions.
+The results for a representative case (unitary, for now) are summarized in \autoref{tab:summar2}:
+
+\begin{table}[h!]
+\centering
+\caption{Estimated DoAs for different initializations of ML methods}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{gray!60}\cellcolor{gray!00} & \multicolumn{3}{c|}{Deterministic} & \multicolumn{3}{c|}{Stochastic} \\ \hline
+\rowcolor{gray!30} Initialization & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_1$ & $\theta_2$ & $\theta_3$ \\
+\hline
+\cellcolor{gray!30} Far: $[-40, 10, 50]$ & $-38.5$ & $8.15$ & $52$ & $-515$ & $-75$ & $101$\\ \hline
+\cellcolor{gray!30} Close: $[-18, 14.5, 28]$ & $-25$ & $20$ & $25$ & $-25$ & $20$ & $25$ \\ \hline
+\cellcolor{gray!30} Very close: $[-23, 21.8, 26.9]$ & $-25$ & $20$ & $25$ & $-25$ & $20$ & $25$ \\ \hline
+\end{tabular}
+\label{tab:summar2}
+\end{table}
+
+Monte Carlo simulations were then performed to average the effects of noise and evaluate the impact of the number of snapshots. The results are shown in Figures~\ref{fig:MLE1} and~\ref{fig:MLE2}.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\linewidth]{images/Graphics/MLE1.png}
-    \caption{MSE for ML estimation of three sources in the deterministic case}
-    \label{fig:MLE1}
+\centering
+\includegraphics[width=0.6\linewidth]{images/Graphics/MLE1.png}
+\caption{MSE for ML estimation of three sources in the deterministic case}
+\label{fig:MLE1}
 \end{figure}
+
+For deterministic signals, the Cramér-Rao Bound (CRB) is the same for all sources, since the primary limitation is additive noise. For stochastic signals, the CRB is higher, particularly for closely spaced sources, reflecting the increased difficulty in separating correlated steering vectors.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\linewidth]{images/Graphics/MLE2.png}
-    \caption{MSE for ML estimation of three sources in the stochastic case}
-    \label{fig:MLE2}
+\centering
+\includegraphics[width=0.6\linewidth]{images/Graphics/MLE2.png}
+\caption{MSE for ML estimation of three sources in the stochastic case}
+\label{fig:MLE2}
 \end{figure}
 
-Monte Carlo simulations confirm that ML is highly sensitive to initialization and noise. For deterministic signals, convergence is generally achieved even with moderate deviations from the true angles, and estimation errors closely follow the CRB. For stochastic signals, convergence is more challenging: small errors in the initial guess can prevent the algorithm from reaching the global minimum, and only accurate initializations or low-noise conditions yield correct estimates.\\
+Monte Carlo simulations show that the Maximum Likelihood (ML) method is highly sensitive to both initialization and noise. For deterministic signals, the algorithm generally converges even when the initial angles deviate moderately from the true values, with estimation errors closely following the CRB. For stochastic signals, convergence is more challenging: small errors in the initial guess can prevent the algorithm from reaching the global minimum, and accurate estimates are obtained only with precise initialization or under low-noise conditions.\\
 
-To improve convergence, we use MUSIC to provide initial DoA estimates and compare ML behavior with three initialization strategies: far from the true DoAs, close to the true DoAs, and MUSIC-based estimates.  
+When initialization is appropriate—as shown in both graphs—the estimates closely follow the CRB, consistent with the fact that the Maximum Likelihood Estimator (MLE) is optimal in terms of mean squared error (MSE).\\
+
+It is also worth noting that MLE estimation is considerably more time-consuming and requires significantly greater computational resources.
+
+\paragraph{Comparison with other DoA estimation techniques\\}
+
+As observed earlier, the MUSIC algorithm performs exceptionally well when sources are well separated (more than 3-4 degrees). When MUSIC works effectively, the MSE is essentially zero (all sources detected), making further refinement unnecessary. We now focus on the scenario of closely spaced sources. \\
+
+Consider three sources at angles $\theta_1 = 18^\circ$, $\theta_2 = 19^\circ$, and $\theta_3 = 20^\circ$. As before, we first test a unitary case and examine the method's behavior. When previous DoA techniques are insufficient, the beamwidth of the power spectrum is too wide to achieve the desired precision. The method still detects the sources correctly, but it cannot fully separate them.\\
+
+To address this, in our peak-finding function, we introduce a floor power level so that, even if three sources are expected, small low-power variations are ignored. The noise floor is estimated as the 20th percentile of the overall scanned power, and the minimum detection threshold is iteratively set to 6 dB above this floor (approximately four times the power). This ensures that only the true source angles are reported.\\
+
+In the following analysis, we compare several configurations: MUSIC alone (which cannot separate close sources), ML deterministic and stochastic with reasonable initial errors (± a few degrees), and ML stochastic initialized with MUSIC.
+\begin{table}[h!]
+\centering
+\caption{Estimated DoAs for several defined cases}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\rowcolor{gray!30} \cellcolor{gray!00} & $\theta_1$ & $\theta_2$ & $\theta_3$ & $\theta_1$ & $\theta_2$ & $\theta_3$ \\
+\hline
+\cellcolor{gray!30} True DoA & $18$ & $19$ & $20$ & $18$ & $19$ & $20$ \\ \hline
+\cellcolor{gray!30} MUSIC alone & $18.5$ & $20$ & & $18.5$ & $20$ & \\ \hline
+\rowcolor{gray!60} Case & \multicolumn{3}{c|}{Deterministic} & \multicolumn{3}{c|}{Stochastic} \\ \hline
+\cellcolor{gray!30} Good initialization $[15, 23, 17]$ & $18$ & $19$ & $20$ & $17.66$ & $18.55$ & $20.77$\\ \hline
+\cellcolor{gray!30} MUSIC initialization $[18.5, 18.5, 18.5]$ & $18$ & $19$ & $20$ & $18.5$ & $18.5$ & $18.5$ \\ \hline
+\end{tabular}
+\label{tab:summar3}
+\end{table}
+
+To confirm the trends observed in the unitary tests, we plot the Monte Carlo estimates over $K$ in \autoref{fig:MLEfin}.
 
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.9\linewidth]{images/Graphics/comparison_mle.png}
-    \caption{ML estimates with different initializations compared to true source directions}
-    \label{fig:MLE3}
+\centering
+\includegraphics[width=0.9\linewidth]{images/Graphics/Final_comp.png}
+\caption{MSE for ML estimation of three sources in the stochastic case}
+\label{fig:MLEfin}
 \end{figure}
 
-The results show that:  
-\begin{itemize}
-    \item For closely spaced sources, ML often fails to converge when initialized far from the true angles. Small initialization errors lead to large estimation errors.  
-    \item MUSIC-based initialization consistently yields accurate ML estimates, closely matching the true DoAs.  
-    \item For well-separated sources, ML is more robust, though MUSIC still provides the most reliable starting point.  
-\end{itemize}
-
-This demonstrates the practical value of combining subspace methods like MUSIC with ML estimation: MUSIC provides good initial guesses that improve ML robustness and accuracy, especially in challenging scenarios with closely spaced sources. While MUSIC alone is effective for most cases, ML can refine estimates when high angular precision is required. However, when the signals are stochastic, ML without good initialization or prior knowledge cannot reliably separate closely spaced sources.
+From the graph, we observe that the deterministic ML estimator converges toward the CRB. The stochastic version remains above its CRB (approximately 20 dB, which is significant). When the stochastic ML is initialized with MUSIC, its performance aligns closely with MUSIC's MSE, reflecting the same limitations.\\
 
 \section*{Conclusion}
 
+This project investigated beamforming and direction-of-arrival estimation techniques for uniform linear antenna arrays under both idealized and realistic conditions. Classical and adaptive beamformers were derived and compared, highlighting the superiority of MVDR-based approaches in interference suppression and SINR performance, particularly when covariance information is available or accurately estimated. Robustification through diagonal loading was shown to significantly improve MPDR stability and convergence in finite-sample scenarios.\\
+
+In the second part, several DoA estimation methods were implemented and analyzed. Non-parametric approaches demonstrated limited resolution for closely spaced sources, while parametric techniques such as MUSIC and Maximum Likelihood achieved much higher angular precision. MUSIC proved especially effective as a preprocessing tool, providing reliable initial estimates that greatly improved ML convergence and robustness. Overall, the results emphasize the complementarity of beamforming, subspace methods, and likelihood-based estimators for high-resolution radar array processing.
 
 \end{document}
